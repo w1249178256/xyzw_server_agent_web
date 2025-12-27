@@ -1,0 +1,3101 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "XYZW Helper API",
+    "description": "后端接口文档：每日任务、疯狂赛车、每月补差、调试工具等",
+    "version": "v1"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:7001",
+      "description": "Generated server url"
+    }
+  ],
+  "security": [
+    {
+      "BearerAuth": []
+    }
+  ],
+  "paths": {
+    "/user/sync_role_data": {
+      "post": {
+        "tags": [
+          "user-controller"
+        ],
+        "operationId": "syncRoleData",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SyncRoleDataRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseString"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/sendSmsCode": {
+      "post": {
+        "tags": [
+          "user-controller"
+        ],
+        "operationId": "sendSmsCode",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendSmsCodeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseObject"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/register": {
+      "post": {
+        "tags": [
+          "user-controller"
+        ],
+        "operationId": "register",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseString"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/login": {
+      "post": {
+        "tags": [
+          "user-controller"
+        ],
+        "operationId": "login",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseLoginBody"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/get_bind_list": {
+      "post": {
+        "tags": [
+          "user-controller"
+        ],
+        "operationId": "getBindList",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BaseRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseBindBody"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/game_role": {
+      "post": {
+        "tags": [
+          "user-controller"
+        ],
+        "operationId": "gameRole",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BindRoleResult"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseRoleBody"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/delete_role": {
+      "post": {
+        "tags": [
+          "user-controller"
+        ],
+        "operationId": "deleteRole",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteRoleRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseString"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/bind": {
+      "post": {
+        "tags": [
+          "user-controller"
+        ],
+        "operationId": "bind",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BindRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseString"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/bindWithSmsCode": {
+      "post": {
+        "tags": [
+          "user-controller"
+        ],
+        "operationId": "loginWithSmsCode",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginWithSmsCodeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseObject"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/available_roles": {
+      "post": {
+        "tags": [
+          "user-controller"
+        ],
+        "operationId": "getAvailableRoles",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SyncRoleDataRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseListRole"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/add_role": {
+      "post": {
+        "tags": [
+          "user-controller"
+        ],
+        "operationId": "addRole",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddRoleRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseString"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/role-config/update-status": {
+      "post": {
+        "tags": [
+          "game-role-config-controller"
+        ],
+        "operationId": "updateConfigStatus",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConfigStatusRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseConfigStatusResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/role-config/save": {
+      "post": {
+        "tags": [
+          "game-role-config-controller"
+        ],
+        "operationId": "saveRoleConfig",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GameRoleConfigEntity"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseRoleConfigResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/role-config/list": {
+      "post": {
+        "tags": [
+          "game-role-config-controller"
+        ],
+        "operationId": "getUserRoleConfigs",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BaseRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseRoleConfigListResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/role-config/init-user-configs": {
+      "post": {
+        "tags": [
+          "game-role-config-controller"
+        ],
+        "operationId": "initConfigsForUserRoles",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BaseRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseString"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/role-config/init-configs": {
+      "post": {
+        "tags": [
+          "game-role-config-controller"
+        ],
+        "operationId": "initConfigsForExistingRoles",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseString"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/role-config/enabled-daily-task": {
+      "post": {
+        "tags": [
+          "game-role-config-controller"
+        ],
+        "operationId": "getEnabledDailyTaskRoles",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseRoleConfigListResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/role-config/detail": {
+      "post": {
+        "tags": [
+          "game-role-config-controller"
+        ],
+        "operationId": "getRoleConfig",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoleConfigRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseRoleConfigResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/role-config/create-default": {
+      "post": {
+        "tags": [
+          "game-role-config-controller"
+        ],
+        "operationId": "createDefaultConfig",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDefaultConfigRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseRoleConfigResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/role-config/check-feature": {
+      "post": {
+        "tags": [
+          "game-role-config-controller"
+        ],
+        "operationId": "checkFeatureEnabled",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeatureCheckRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseFeatureCheckResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/role-config/batch-update": {
+      "post": {
+        "tags": [
+          "game-role-config-controller"
+        ],
+        "operationId": "batchUpdateFeatures",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BatchUpdateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseBatchUpdateResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/game/task/{taskId}/toggle": {
+      "post": {
+        "tags": [
+          "game-controller"
+        ],
+        "operationId": "toggleTask",
+        "parameters": [
+          {
+            "name": "taskId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "enabled",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseString"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/game/task/charm-buy": {
+      "post": {
+        "tags": [
+          "game-controller"
+        ],
+        "operationId": "submitCharmBuyTask",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CharmBuyTaskRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseLong"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/game/task/battle-renewal-hangup": {
+      "post": {
+        "tags": [
+          "game-controller"
+        ],
+        "operationId": "createBattleRenewalHangupTask",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GameRegetRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseLong"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/game/roleKey/list": {
+      "post": {
+        "tags": [
+          "game-controller"
+        ],
+        "operationId": "getRoleKeyList",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BaseRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseListGameRoleKey"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/game/roleKey/init": {
+      "post": {
+        "tags": [
+          "game-controller"
+        ],
+        "operationId": "initRoleKey",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoleKeyRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseGameRoleKey"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/game/roleKey/delete": {
+      "post": {
+        "tags": [
+          "game-controller"
+        ],
+        "operationId": "deleteRoleKey",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoleKeyRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseString"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/game/getRoleInfo": {
+      "post": {
+        "tags": [
+          "game-controller"
+        ],
+        "operationId": "getRoleInfo",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GameRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseObject"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/game/dailyTask": {
+      "post": {
+        "tags": [
+          "game-controller"
+        ],
+        "operationId": "executeDailyTask",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GameRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseDailyTaskResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/game/completeMonthlyTasks": {
+      "post": {
+        "tags": [
+          "game-controller"
+        ],
+        "operationId": "completeMonthlyTasks",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GameRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseMapStringObject"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/game/collection/claimFree": {
+      "post": {
+        "tags": [
+          "game-controller"
+        ],
+        "operationId": "collectionClaimFree",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GameRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseObject"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/game/climbTower": {
+      "post": {
+        "tags": [
+          "game-controller"
+        ],
+        "operationId": "climbTower",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GameRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseMapStringObject"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/game/car/send": {
+      "post": {
+        "tags": [
+          "game-controller"
+        ],
+        "operationId": "carSend",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CarSendRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseObject"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/game/car/refresh": {
+      "post": {
+        "tags": [
+          "game-controller"
+        ],
+        "operationId": "carRefresh",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CarRefreshRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseObject"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/game/car/listSimple": {
+      "post": {
+        "tags": [
+          "game-controller"
+        ],
+        "operationId": "carListSimple",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GameRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseObject"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/game/car/getRoleCar": {
+      "post": {
+        "tags": [
+          "game-controller"
+        ],
+        "operationId": "carGetRoleCar",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GameRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseObject"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/game/car/claim": {
+      "post": {
+        "tags": [
+          "game-controller"
+        ],
+        "operationId": "carClaim",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CarClaimRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseObject"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/daily-task/execute-role": {
+      "post": {
+        "tags": [
+          "daily-task-controller"
+        ],
+        "operationId": "executeRoleDailyTask",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoleDailyTaskRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseObject"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/daily-task/execute-all": {
+      "post": {
+        "tags": [
+          "daily-task-controller"
+        ],
+        "operationId": "executeAllDailyTasks",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseObject"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ip-management/whitelist/remove/{ip}": {
+      "post": {
+        "tags": [
+          "ip-management-controller"
+        ],
+        "operationId": "removeFromWhitelist",
+        "parameters": [
+          {
+            "name": "ip",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ip-management/whitelist/add/{ip}": {
+      "post": {
+        "tags": [
+          "ip-management-controller"
+        ],
+        "operationId": "addToWhitelist",
+        "parameters": [
+          {
+            "name": "ip",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ip-management/unban/{ip}": {
+      "post": {
+        "tags": [
+          "ip-management-controller"
+        ],
+        "operationId": "unbanIp",
+        "parameters": [
+          {
+            "name": "ip",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ip-management/reset-count/{ip}": {
+      "post": {
+        "tags": [
+          "ip-management-controller"
+        ],
+        "operationId": "resetErrorCount",
+        "parameters": [
+          {
+            "name": "ip",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ip-management/clean-expired": {
+      "post": {
+        "tags": [
+          "ip-management-controller"
+        ],
+        "operationId": "cleanExpiredBans",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ip-management/ban": {
+      "post": {
+        "tags": [
+          "ip-management-controller"
+        ],
+        "operationId": "banIp",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BanRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/game/task/list": {
+      "get": {
+        "tags": [
+          "game-controller"
+        ],
+        "operationId": "getTaskList",
+        "parameters": [
+          {
+            "name": "roleId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseListGameTaskEntity"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/game/getToken/{roleKey}": {
+      "get": {
+        "tags": [
+          "game-controller"
+        ],
+        "operationId": "getToken",
+        "parameters": [
+          {
+            "name": "roleKey",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/daily-task/status": {
+      "get": {
+        "tags": [
+          "daily-task-controller"
+        ],
+        "operationId": "getSchedulerStatus",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseTaskResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/daily-task/health": {
+      "get": {
+        "tags": [
+          "daily-task-controller"
+        ],
+        "operationId": "healthCheck",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseHealthStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/daily-task/config": {
+      "get": {
+        "tags": [
+          "daily-task-controller"
+        ],
+        "operationId": "getSchedulerConfig",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseSchedulerConfig"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ip-management/statistics": {
+      "get": {
+        "tags": [
+          "ip-management-controller"
+        ],
+        "operationId": "getStatistics",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ip-management/error-count/{ip}": {
+      "get": {
+        "tags": [
+          "ip-management-controller"
+        ],
+        "operationId": "getErrorCount",
+        "parameters": [
+          {
+            "name": "ip",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ip-management/banned": {
+      "get": {
+        "tags": [
+          "ip-management-controller"
+        ],
+        "operationId": "getBannedIps",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/game/task/{taskId}": {
+      "delete": {
+        "tags": [
+          "game-controller"
+        ],
+        "operationId": "deleteTask",
+        "parameters": [
+          {
+            "name": "taskId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseString"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/game/login": {
+      "get": {
+        "tags": [
+          "game-controller"
+        ],
+        "operationId": "login_1",
+        "parameters": [
+          {
+            "name": "request",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/GameLoginRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseString"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "game-controller"
+        ],
+        "operationId": "login_3",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GameLoginRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseString"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "game-controller"
+        ],
+        "operationId": "login_2",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GameLoginRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseString"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "game-controller"
+        ],
+        "operationId": "login_4",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GameLoginRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseString"
+                }
+              }
+            }
+          }
+        }
+      },
+      "options": {
+        "tags": [
+          "game-controller"
+        ],
+        "operationId": "login_7",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GameLoginRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseString"
+                }
+              }
+            }
+          }
+        }
+      },
+      "head": {
+        "tags": [
+          "game-controller"
+        ],
+        "operationId": "login_6",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GameLoginRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseString"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "game-controller"
+        ],
+        "operationId": "login_5",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GameLoginRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseString"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/game/bottleRestart": {
+      "get": {
+        "tags": [
+          "game-controller"
+        ],
+        "operationId": "bottleRestart",
+        "parameters": [
+          {
+            "name": "request",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/GameRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseString"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "game-controller"
+        ],
+        "operationId": "bottleRestart_2",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GameRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseString"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "game-controller"
+        ],
+        "operationId": "bottleRestart_1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GameRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseString"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "game-controller"
+        ],
+        "operationId": "bottleRestart_3",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GameRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseString"
+                }
+              }
+            }
+          }
+        }
+      },
+      "options": {
+        "tags": [
+          "game-controller"
+        ],
+        "operationId": "bottleRestart_6",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GameRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseString"
+                }
+              }
+            }
+          }
+        }
+      },
+      "head": {
+        "tags": [
+          "game-controller"
+        ],
+        "operationId": "bottleRestart_5",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GameRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseString"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "game-controller"
+        ],
+        "operationId": "bottleRestart_4",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GameRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseString"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "SyncRoleDataRequest": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "bindId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "BaseResponseString": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "msg": {
+            "type": "string"
+          },
+          "data": {
+            "type": "string"
+          }
+        }
+      },
+      "SendSmsCodeRequest": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "phone": {
+            "type": "string"
+          }
+        }
+      },
+      "BaseResponseObject": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "msg": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        }
+      },
+      "LoginRequest": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "BaseResponseLoginBody": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "msg": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/LoginBody"
+          }
+        }
+      },
+      "LoginBody": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          }
+        }
+      },
+      "BaseRequest": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "BaseResponseBindBody": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "msg": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/BindBody"
+          }
+        }
+      },
+      "BindBody": {
+        "type": "object",
+        "properties": {
+          "bindInfo": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BindInfo"
+            }
+          }
+        }
+      },
+      "BindInfo": {
+        "type": "object",
+        "properties": {
+          "bindId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "remark": {
+            "type": "string"
+          }
+        }
+      },
+      "BindRoleResult": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "bindId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "roleId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "BaseResponseRoleBody": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "msg": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/RoleBody"
+          }
+        }
+      },
+      "RoleBody": {
+        "type": "object",
+        "properties": {
+          "roleInfos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RoleInfo"
+            }
+          }
+        }
+      },
+      "RoleInfo": {
+        "type": "object",
+        "properties": {
+          "roleId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "serverName": {
+            "type": "string"
+          },
+          "roleName": {
+            "type": "string"
+          }
+        }
+      },
+      "DeleteRoleRequest": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "roleId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "BindRequest": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "context": {
+            "type": "string"
+          },
+          "remark": {
+            "type": "string"
+          }
+        }
+      },
+      "LoginWithSmsCodeRequest": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "smsCode": {
+            "type": "string"
+          }
+        }
+      },
+      "BaseResponseListRole": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "msg": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Role"
+            }
+          }
+        }
+      },
+      "Role": {
+        "type": "object",
+        "properties": {
+          "roleId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "serverId": {
+            "type": "string"
+          },
+          "serverName": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "level": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "power": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "lordSkinId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lordSkinExpireTime": {
+            "type": "string"
+          },
+          "loginAt": {
+            "type": "string"
+          }
+        }
+      },
+      "AddRoleRequest": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "bindId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "gameRoleId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "serverId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "serverName": {
+            "type": "string"
+          },
+          "roleName": {
+            "type": "string"
+          },
+          "roleLevel": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ConfigStatusRequest": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "roleId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "BaseResponseConfigStatusResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "msg": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/ConfigStatusResponse"
+          }
+        }
+      },
+      "ConfigStatusResponse": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "roleId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "GameRoleConfigEntity": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "roleId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "dailyTaskEnabled": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "autoBattleEnabled": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "autoUpgradeEnabled": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "bottleEnabled": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "arenaEnabled": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "legionEnabled": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nightmareEnabled": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "friendBatchEnabled": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "storeAutoBuyEnabled": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "configStatus": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updateTime": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "BaseResponseRoleConfigResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "msg": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/RoleConfigResponse"
+          }
+        }
+      },
+      "RoleConfigResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/GameRoleConfigEntity"
+          }
+        }
+      },
+      "BaseResponseRoleConfigListResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "msg": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/RoleConfigListResponse"
+          }
+        }
+      },
+      "RoleConfigListResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GameRoleConfigEntity"
+            }
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "RoleConfigRequest": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "roleId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "CreateDefaultConfigRequest": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "roleId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "FeatureCheckRequest": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "roleId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "featureName": {
+            "type": "string"
+          }
+        }
+      },
+      "BaseResponseFeatureCheckResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "msg": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/FeatureCheckResponse"
+          }
+        }
+      },
+      "FeatureCheckResponse": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "roleId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "featureName": {
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          }
+        }
+      },
+      "BatchUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "roleId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "features": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        }
+      },
+      "BaseResponseBatchUpdateResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "msg": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/BatchUpdateResponse"
+          }
+        }
+      },
+      "BatchUpdateResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/GameRoleConfigEntity"
+          },
+          "updatedFeatures": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "CharmBuyTaskRequest": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "roleId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "taskName": {
+            "type": "string"
+          },
+          "charmId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "buyNum": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "cronExpression": {
+            "type": "string"
+          }
+        }
+      },
+      "BaseResponseLong": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "msg": {
+            "type": "string"
+          },
+          "data": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "GameRegetRequest": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "roleId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "BaseResponseListGameRoleKey": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "msg": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GameRoleKey"
+            }
+          }
+        }
+      },
+      "GameRoleKey": {
+        "type": "object",
+        "properties": {
+          "roleName": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          }
+        }
+      },
+      "RoleKeyRequest": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "roleId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "BaseResponseGameRoleKey": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "msg": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/GameRoleKey"
+          }
+        }
+      },
+      "GameRequest": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "roleId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "BaseResponseDailyTaskResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "msg": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/DailyTaskResponse"
+          }
+        }
+      },
+      "DailyTaskResponse": {
+        "type": "object",
+        "properties": {
+          "currentStep": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "roleData": {
+            "type": "object"
+          },
+          "message": {
+            "type": "string"
+          },
+          "progress": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nextStep": {
+            "type": "string"
+          },
+          "taskDetails": {
+            "type": "object"
+          }
+        }
+      },
+      "BaseResponseMapStringObject": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "msg": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object"
+            }
+          }
+        }
+      },
+      "CarSendRequest": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "roleId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "carId": {
+            "type": "string"
+          },
+          "helperId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "text": {
+            "type": "string"
+          },
+          "isUpgrade": {
+            "type": "boolean"
+          }
+        }
+      },
+      "CarRefreshRequest": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "roleId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "carId": {
+            "type": "string"
+          }
+        }
+      },
+      "CarClaimRequest": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "roleId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "carId": {
+            "type": "string"
+          }
+        }
+      },
+      "RoleDailyTaskRequest": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "roleId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "BanRequest": {
+        "type": "object",
+        "properties": {
+          "ip": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          }
+        }
+      },
+      "BaseResponseListGameTaskEntity": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "msg": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GameTaskEntity"
+            }
+          }
+        }
+      },
+      "GameTaskEntity": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "roleId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "taskName": {
+            "type": "string"
+          },
+          "taskType": {
+            "type": "string"
+          },
+          "cronExpression": {
+            "type": "string"
+          },
+          "taskConfig": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lastExecuteTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "nextExecuteTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "executeCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "successCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "failCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "createTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "maxRetryCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "currentRetryCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "retryInterval": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "retryStrategy": {
+            "type": "string"
+          },
+          "lastErrorMessage": {
+            "type": "string"
+          },
+          "nextRetryTime": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "TokenResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "msg": {
+            "type": "string"
+          },
+          "token": {
+            "type": "string"
+          }
+        }
+      },
+      "BaseResponseTaskResult": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "msg": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/TaskResult"
+          }
+        }
+      },
+      "TaskResult": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean"
+          },
+          "task": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object"
+            }
+          }
+        }
+      },
+      "BaseResponseHealthStatus": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "msg": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/HealthStatus"
+          }
+        }
+      },
+      "HealthStatus": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "service": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "BaseResponseSchedulerConfig": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "msg": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/SchedulerConfig"
+          }
+        }
+      },
+      "SchedulerConfig": {
+        "type": "object",
+        "properties": {
+          "scheduleCron": {
+            "type": "string"
+          },
+          "scheduleDescription": {
+            "type": "string"
+          },
+          "concurrentThreads": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "autoExecute": {
+            "type": "boolean"
+          }
+        }
+      },
+      "GameLoginRequest": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "roleId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "name": "BearerAuth",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
