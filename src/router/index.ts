@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import { useUserStore } from '@/stores/user'
+import { useLicenseStore } from '@/stores/license'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -13,6 +14,18 @@ const routes: RouteRecordRaw[] = [
     name: 'Register',
     component: () => import('@/views/auth/Register.vue'),
     meta: { requiresAuth: false }
+  },
+  {
+    path: '/activate',
+    name: 'Activate',
+    component: () => import('@/views/auth/Activate.vue'),
+    meta: { requiresAuth: false, skipLicenseCheck: true }
+  },
+  {
+    path: '/wx-callback',
+    name: 'WxCallback',
+    component: () => import('@/views/auth/WxCallback.vue'),
+    meta: { requiresAuth: false, skipLicenseCheck: true }
   },
   {
     path: '/',
@@ -84,10 +97,24 @@ const router = createRouter({
   routes
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, _from, next) => {
   const userStore = useUserStore()
+  const licenseStore = useLicenseStore()
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth !== false)
+  const skipLicenseCheck = to.matched.some(record => record.meta.skipLicenseCheck === true)
 
+  // 检查 License 状态（仅对需要检查的页面）
+  if (!skipLicenseCheck && !licenseStore.checked) {
+    await licenseStore.checkLicenseStatus()
+  }
+
+  // 如果 License 无效且不是激活页面，跳转到激活页面
+  if (!skipLicenseCheck && !licenseStore.isValid) {
+    next({ path: '/activate' })
+    return
+  }
+
+  // 登录状态检查
   if (requiresAuth && !userStore.isLoggedIn) {
     next({ path: '/login', query: { redirect: to.fullPath } })
   } else if (!requiresAuth && userStore.isLoggedIn && (to.path === '/login' || to.path === '/register')) {

@@ -17,6 +17,126 @@
     }
   ],
   "paths": {
+    "/user/wx_unbind": {
+      "post": {
+        "tags": [
+          "user-controller"
+        ],
+        "operationId": "wxUnbind",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BaseRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseString"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/wx_login": {
+      "post": {
+        "tags": [
+          "user-controller"
+        ],
+        "operationId": "wxLogin",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WxLoginRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseWxUserInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/wx_bind_status": {
+      "post": {
+        "tags": [
+          "user-controller"
+        ],
+        "operationId": "wxBindStatus",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BaseRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseWxUserInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/wx_bind": {
+      "post": {
+        "tags": [
+          "user-controller"
+        ],
+        "operationId": "wxBind",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WxBindRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseWxUserInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/user/sync_role_data": {
       "post": {
         "tags": [
@@ -650,6 +770,101 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/BaseResponseBatchUpdateResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/license/reload": {
+      "post": {
+        "tags": [
+          "license-controller"
+        ],
+        "operationId": "reloadLicense",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/license/init": {
+      "post": {
+        "tags": [
+          "license-controller"
+        ],
+        "operationId": "initializeLicense",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/license/activate": {
+      "post": {
+        "tags": [
+          "license-controller"
+        ],
+        "operationId": "activateLicense",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
                 }
               }
             }
@@ -1384,6 +1599,52 @@
         }
       }
     },
+    "/license/status": {
+      "get": {
+        "tags": [
+          "license-controller"
+        ],
+        "operationId": "getLicenseStatus",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/license/info": {
+      "get": {
+        "tags": [
+          "license-controller"
+        ],
+        "operationId": "getServiceInfo",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/game/task/list": {
       "get": {
         "tags": [
@@ -2014,14 +2275,10 @@
   },
   "components": {
     "schemas": {
-      "SyncRoleDataRequest": {
+      "BaseRequest": {
         "type": "object",
         "properties": {
           "userId": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "bindId": {
             "type": "integer",
             "format": "int64"
           }
@@ -2039,6 +2296,105 @@
           },
           "data": {
             "type": "string"
+          }
+        }
+      },
+      "WxLoginRequest": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "openId": {
+            "type": "string"
+          },
+          "unionId": {
+            "type": "string"
+          },
+          "nickname": {
+            "type": "string"
+          },
+          "avatarUrl": {
+            "type": "string"
+          }
+        }
+      },
+      "BaseResponseWxUserInfo": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "msg": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/WxUserInfo"
+          }
+        }
+      },
+      "WxUserInfo": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "username": {
+            "type": "string"
+          },
+          "openId": {
+            "type": "string"
+          },
+          "nickname": {
+            "type": "string"
+          },
+          "avatarUrl": {
+            "type": "string"
+          },
+          "wxBound": {
+            "type": "boolean"
+          },
+          "token": {
+            "type": "string"
+          }
+        }
+      },
+      "WxBindRequest": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "code": {
+            "type": "string"
+          },
+          "openId": {
+            "type": "string"
+          },
+          "unionId": {
+            "type": "string"
+          },
+          "nickname": {
+            "type": "string"
+          },
+          "avatarUrl": {
+            "type": "string"
+          }
+        }
+      },
+      "SyncRoleDataRequest": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "bindId": {
+            "type": "integer",
+            "format": "int64"
           }
         }
       },
@@ -2100,15 +2456,6 @@
         "properties": {
           "token": {
             "type": "string"
-          }
-        }
-      },
-      "BaseRequest": {
-        "type": "object",
-        "properties": {
-          "userId": {
-            "type": "integer",
-            "format": "int64"
           }
         }
       },

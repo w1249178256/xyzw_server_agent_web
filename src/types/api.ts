@@ -304,3 +304,58 @@ export interface TokenResponse {
   msg: string
   token: string
 }
+
+// 微信相关类型
+export interface WxLoginRequest {
+  code: string
+  openId?: string
+  unionId?: string
+  nickname?: string
+  avatarUrl?: string
+}
+
+export interface WxBindRequest {
+  code: string
+  openId?: string
+  unionId?: string
+  nickname?: string
+  avatarUrl?: string
+}
+
+export interface WxUserInfo {
+  userId: number
+  username: string
+  openId: string
+  nickname: string
+  avatarUrl: string
+  wxBound: boolean
+  token?: string
+}
+
+// License 相关类型
+export interface LicenseStatus {
+  valid: boolean
+  activated: boolean
+  status?: string  // UNACTIVATED, ACTIVATED, EXPIRED 等
+  serviceId?: string
+  machineId?: string
+  expireTime?: string
+  remainingDays?: number
+  message?: string
+  licenseInfo?: LicenseInfo
+  usage?: any
+  [key: string]: any
+}
+
+export interface LicenseInfo {
+  serviceName?: string
+  version?: string
+  serviceId?: string
+  machineId?: string
+  hardwareInfo?: any
+  [key: string]: any
+}
+
+export interface LicenseActivateRequest {
+  licenseData: string  // base64编码的license内容
+}

@@ -12,6 +12,7 @@ import {
   sendBindSmsCode,
   bindWithSmsCode
 } from '@/api/modules/account'
+import { wxBind, wxBindStatus, wxUnbind } from '@/api/modules/wx'
 import type { GameBind, GameRole } from '@/types/models'
 import type {
   BindRequest,
@@ -21,7 +22,9 @@ import type {
   BatchAddRolesRequest,
   BatchAddRolesResponse,
   SendBindSmsCodeRequest,
-  BindWithSmsCodeRequest
+  BindWithSmsCodeRequest,
+  WxBindRequest,
+  WxUserInfo
 } from '@/types/api'
 
 export const useAccountStore = defineStore('account', () => {
@@ -31,6 +34,7 @@ export const useAccountStore = defineStore('account', () => {
   const currentRoles = ref<GameRole[]>([])
   const availableRoles = ref<Role[]>([]) // 游戏账号下的所有可用角色
   const loading = ref(false)
+  const wxUserInfo = ref<WxUserInfo | null>(null) // 微信用户信息
 
   async function fetchBindList() {
     loading.value = true
@@ -237,12 +241,66 @@ export const useAccountStore = defineStore('account', () => {
     return bindList.value[bindList.value.length - 1].bindId
   }
 
+  // 使用微信授权码绑定账号
+  async function bindWithWxCode(data: WxBindRequest) {
+    loading.value = true
+    try {
+      const res = await wxBind(data)
+      if (res.code === 200 || res.code === 0) {
+        wxUserInfo.value = res.data
+        // 绑定成功后，重新获取绑定列表
+        await fetchBindList()
+        return { success: true, message: '微信绑定成功', data: res.data }
+      }
+      return { success: false, message: res.msg || '微信绑定失败' }
+    } catch (error) {
+      console.error('Failed to bind with wx code:', error)
+      return { success: false, message: '微信绑定失败，请稍后重试' }
+    } finally {
+      loading.value = false
+    }
+  }
+
+  // 查询微信绑定状态
+  async function fetchWxBindStatus() {
+    try {
+      const res = await wxBindStatus()
+      if (res.code === 200 || res.code === 0) {
+        wxUserInfo.value = res.data
+        return res.data
+      }
+      return null
+    } catch (error) {
+      console.error('Failed to fetch wx bind status:', error)
+      return null
+    }
+  }
+
+  // 解绑微信
+  async function unbindWx() {
+    loading.value = true
+    try {
+      const res = await wxUnbind()
+      if (res.code === 200 || res.code === 0) {
+        wxUserInfo.value = null
+        return { success: true, message: '解绑成功' }
+      }
+      return { success: false, message: res.msg || '解绑失败' }
+    } catch (error) {
+      console.error('Failed to unbind wx:', error)
+      return { success: false, message: '解绑失败，请稍后重试' }
+    } finally {
+      loading.value = false
+    }
+  }
+
   return {
     bindList,
     currentBindId,
     currentRoles,
     availableRoles,
     loading,
+    wxUserInfo,
     fetchBindList,
     createBind,
     fetchRoles,
@@ -254,6 +312,9 @@ export const useAccountStore = defineStore('account', () => {
     removeRole,
     sendBindCode,
     bindWithCode,
-    getLatestBindId
+    getLatestBindId,
+    bindWithWxCode,
+    fetchWxBindStatus,
+    unbindWx
   }
 })
