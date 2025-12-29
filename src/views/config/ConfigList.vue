@@ -15,8 +15,26 @@
       />
 
       <el-table :data="configs" v-loading="loading" style="width: 100%">
-        <el-table-column prop="roleId" label="角色ID" width="100" />
-        <el-table-column prop="userId" label="用户ID" width="100" />
+        <el-table-column label="角色名称" width="150">
+          <template #default="{ row }">
+            {{ row.roleName || `角色${row.roleId}` }}
+          </template>
+        </el-table-column>
+        <el-table-column label="服务器" width="120">
+          <template #default="{ row }">
+            {{ row.serverName || '-' }}
+          </template>
+        </el-table-column>
+        <el-table-column label="等级" width="80">
+          <template #default="{ row }">
+            {{ row.level || '-' }}
+          </template>
+        </el-table-column>
+        <el-table-column label="战力" width="120">
+          <template #default="{ row }">
+            {{ row.power ? formatPower(row.power) : '-' }}
+          </template>
+        </el-table-column>
         <el-table-column label="每日任务" width="100">
           <template #default="{ row }">
             <el-switch
@@ -59,14 +77,11 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { useUserStore } from '@/stores/user'
 import { getRoleConfigList, saveRoleConfig } from '@/api/modules/roleConfig'
 import { ElMessage } from 'element-plus'
 import type { GameRoleConfigEntity } from '@/types/api'
 
 const router = useRouter()
-const userStore = useUserStore()
-
 const configs = ref<GameRoleConfigEntity[]>([])
 const loading = ref(false)
 
@@ -77,7 +92,8 @@ onMounted(async () => {
 async function loadConfigs() {
   loading.value = true
   try {
-    const res = await getRoleConfigList({ userId: userStore.userId })
+    // userId 由后端从 token 解析，前端不传
+    const res = await getRoleConfigList({})
     if (res.data?.data) {
       configs.value = res.data.data
     }
@@ -100,5 +116,15 @@ async function updateConfig(config: GameRoleConfigEntity) {
 
 function goToDetail(roleId: number) {
   router.push(`/config/${roleId}`)
+}
+
+// 格式化战力显示
+function formatPower(power: number): string {
+  if (power >= 100000000) {
+    return (power / 100000000).toFixed(2) + '亿'
+  } else if (power >= 10000) {
+    return (power / 10000).toFixed(2) + '万'
+  }
+  return power.toLocaleString()
 }
 </script>

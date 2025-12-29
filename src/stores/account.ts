@@ -7,10 +7,22 @@ import {
   syncRoleData,
   getAvailableRoles,
   addRole,
-  deleteRole
+  batchAddRoles,
+  deleteRole,
+  sendBindSmsCode,
+  bindWithSmsCode
 } from '@/api/modules/account'
 import type { GameBind, GameRole } from '@/types/models'
-import type { BindRequest, BindRoleResult, Role, AddRoleRequest } from '@/types/api'
+import type {
+  BindRequest,
+  BindRoleResult,
+  Role,
+  AddRoleRequest,
+  BatchAddRolesRequest,
+  BatchAddRolesResponse,
+  SendBindSmsCodeRequest,
+  BindWithSmsCodeRequest
+} from '@/types/api'
 
 export const useAccountStore = defineStore('account', () => {
 
@@ -64,7 +76,9 @@ export const useAccountStore = defineStore('account', () => {
         const roles = res.data.roleInfos.map(role => ({
           roleId: role.roleId,
           serverName: role.serverName,
-          roleName: role.roleName
+          roleName: role.roleName,
+          level: role.level,
+          power: role.power
         }))
 
         const bind = bindList.value.find(b => b.bindId === bindId)
@@ -142,6 +156,25 @@ export const useAccountStore = defineStore('account', () => {
     }
   }
 
+  // 批量添加游戏角色到平台用户
+  async function batchBindRoles(data: BatchAddRolesRequest) {
+    loading.value = true
+    try {
+      const res = await batchAddRoles(data)
+      if (res.code === 200 || res.code === 0) {
+        // 重新获取已绑定角色列表
+        await fetchRoles(data.bindId)
+        return res.data as BatchAddRolesResponse
+      }
+      return null
+    } catch (error) {
+      console.error('Failed to batch bind roles:', error)
+      return null
+    } finally {
+      loading.value = false
+    }
+  }
+
   // 删除已绑定的游戏角色
   async function removeRole(roleId: number, bindId?: number) {
     loading.value = true
@@ -163,6 +196,47 @@ export const useAccountStore = defineStore('account', () => {
     }
   }
 
+  // 发送绑定验证码
+  async function sendBindCode(data: SendBindSmsCodeRequest) {
+    try {
+      const res = await sendBindSmsCode(data)
+      if (res.code === 200 || res.code === 0) {
+        return { success: true, message: res.msg }
+      }
+      return { success: false, message: res.msg || '发送失败' }
+    } catch (error) {
+      console.error('Failed to send bind sms code:', error)
+      return { success: false, message: '发送失败，请稍后重试' }
+    }
+  }
+
+  // 使用验证码绑定账号
+  async function bindWithCode(data: BindWithSmsCodeRequest) {
+    loading.value = true
+    try {
+      const res = await bindWithSmsCode(data)
+      if (res.code === 200 || res.code === 0) {
+        // 绑定成功后，重新获取绑定列表
+        await fetchBindList()
+        return { success: true, message: res.msg }
+      }
+      return { success: false, message: res.msg || '绑定失败' }
+    } catch (error) {
+      console.error('Failed to bind with sms code:', error)
+      return { success: false, message: '绑定失败，请稍后重试' }
+    } finally {
+      loading.value = false
+    }
+  }
+
+  // 获取最新的 bindId
+  function getLatestBindId(): number | null {
+    if (bindList.value.length === 0) {
+      return null
+    }
+    return bindList.value[bindList.value.length - 1].bindId
+  }
+
   return {
     bindList,
     currentBindId,
@@ -176,6 +250,10 @@ export const useAccountStore = defineStore('account', () => {
     selectBind,
     fetchAvailableRoles,
     bindRole,
-    removeRole
+    batchBindRoles,
+    removeRole,
+    sendBindCode,
+    bindWithCode,
+    getLatestBindId
   }
 })

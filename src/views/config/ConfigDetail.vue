@@ -1,7 +1,14 @@
 <template>
   <div class="page-container">
     <div class="page-header">
-      <h2 class="page-title">角色配置详情 - {{ roleId }}</h2>
+      <div>
+        <h2 class="page-title">{{ roleTitle }}</h2>
+        <p v-if="config.serverName" class="role-subtitle">
+          {{ config.serverName }}
+          <span v-if="config.level"> · Lv.{{ config.level }}</span>
+          <span v-if="config.power" class="power-text"> · ⚔️{{ formatPower(config.power) }}</span>
+        </p>
+      </div>
       <el-button @click="$router.back()">返回</el-button>
     </div>
 
@@ -48,21 +55,26 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { useUserStore } from '@/stores/user'
 import { getRoleConfig, saveRoleConfig as saveConfigAPI } from '@/api/modules/roleConfig'
 import { ElMessage } from 'element-plus'
 import type { GameRoleConfigEntity } from '@/types/api'
 
 const route = useRoute()
-const userStore = useUserStore()
-
 const roleId = ref(Number(route.params.roleId))
 const loading = ref(false)
 
+// 角色标题显示
+const roleTitle = computed(() => {
+  if (config.roleName) {
+    return `角色配置 - ${config.roleName}`
+  }
+  return `角色配置 - 角色${roleId.value}`
+})
+
 const config = reactive<GameRoleConfigEntity>({
-  userId: userStore.userId,
+  // userId 由后端从 token 解析，前端不传
   roleId: roleId.value,
   dailyTaskEnabled: 0,
   autoBattleEnabled: 0,
@@ -84,7 +96,6 @@ async function loadConfig() {
   loading.value = true
   try {
     const res = await getRoleConfig({
-      userId: userStore.userId,
       roleId: roleId.value
     })
     if (res.data?.data) {
@@ -108,9 +119,31 @@ async function saveConfig() {
     loading.value = false
   }
 }
+
+// 格式化战力显示
+function formatPower(power: number): string {
+  if (power >= 100000000) {
+    return (power / 100000000).toFixed(2) + '亿'
+  } else if (power >= 10000) {
+    return (power / 10000).toFixed(2) + '万'
+  }
+  return power.toLocaleString()
+}
 </script>
 
 <style scoped>
+.role-subtitle {
+  margin: 8px 0 0 0;
+  color: #606266;
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.power-text {
+  color: #f56c6c;
+  font-weight: 600;
+}
+
 .config-section {
   max-width: 600px;
 }

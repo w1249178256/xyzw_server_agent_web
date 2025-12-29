@@ -9,7 +9,11 @@ import type {
   SyncRoleDataRequest,
   Role,
   AddRoleRequest,
-  DeleteRoleRequest
+  DeleteRoleRequest,
+  BatchAddRolesRequest,
+  BatchAddRolesResponse,
+  SendBindSmsCodeRequest,
+  BindWithSmsCodeRequest
 } from '@/types/api'
 
 export function getBindList(data: BaseRequest): Promise<BaseResponse<BindBody>> {
@@ -23,6 +27,28 @@ export function getBindList(data: BaseRequest): Promise<BaseResponse<BindBody>> 
 export function bindAccount(data: BindRequest): Promise<BaseResponse<string>> {
   return request({
     url: '/user/bind',
+    method: 'post',
+    data
+  })
+}
+
+// 发送绑定验证码
+export function sendBindSmsCode(
+  data: SendBindSmsCodeRequest
+): Promise<BaseResponse<string>> {
+  return request({
+    url: '/user/sendSmsCode',
+    method: 'post',
+    data
+  })
+}
+
+// 使用验证码绑定账号
+export function bindWithSmsCode(
+  data: BindWithSmsCodeRequest
+): Promise<BaseResponse<string>> {
+  return request({
+    url: '/user/bindWithSmsCode',
     method: 'post',
     data
   })
@@ -57,6 +83,17 @@ export function getAvailableRoles(data: SyncRoleDataRequest): Promise<BaseRespon
 export function addRole(data: AddRoleRequest): Promise<BaseResponse<string>> {
   return request({
     url: '/user/add_role',
+    method: 'post',
+    data
+  })
+}
+
+// 批量添加游戏角色到平台用户
+export function batchAddRoles(
+  data: BatchAddRolesRequest
+): Promise<BaseResponse<BatchAddRolesResponse>> {
+  return request({
+    url: '/user/batch_add_roles',
     method: 'post',
     data
   })

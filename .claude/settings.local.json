@@ -6,7 +6,13 @@
       "Bash(npm install:*)",
       "Bash(npm run dev:*)",
       "Bash(timeout /t 5)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(git push:*)",
+      "Bash(git fetch:*)",
+      "Bash(git merge-base:*)",
+      "Bash(git rev-parse:*)",
+      "Bash(git pull:*)",
+      "Bash(npm run build:*)"
     ]
   }
 }

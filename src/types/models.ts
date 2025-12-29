@@ -17,6 +17,8 @@ export interface GameRole {
   roleId: number
   serverName: string
   roleName: string
+  level?: number // 角色等级（可选）
+  power?: number // 战力（可选）
   config?: RoleConfig
 }
 
@@ -25,6 +27,11 @@ export interface RoleConfig {
   id: number
   userId: number
   roleId: number
+  // 角色信息字段（可选）
+  roleName?: string
+  serverName?: string
+  level?: number
+  power?: number
   dailyTaskEnabled: boolean
   autoBattleEnabled: boolean
   autoUpgradeEnabled: boolean

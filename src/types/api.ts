@@ -25,6 +25,17 @@ export interface LoginWithSmsCodeRequest {
   smsCode: string
 }
 
+// 游戏账号绑定 - 发送验证码
+export interface SendBindSmsCodeRequest {
+  phone: string
+}
+
+// 游戏账号绑定 - 使用验证码绑定
+export interface BindWithSmsCodeRequest {
+  phone: string
+  smsCode: string
+}
+
 // 游戏账号绑定相关
 export interface BaseRequest {
   // 不需要 userId，后端从 token 解析
@@ -53,6 +64,8 @@ export interface RoleInfo {
   roleId: number
   serverName: string
   roleName: string
+  level?: number // 角色等级（可选）
+  power?: number // 战力（可选）
 }
 
 export interface RoleBody {
@@ -89,6 +102,26 @@ export interface DeleteRoleRequest {
   roleId: number
 }
 
+// 批量添加角色请求
+export interface BatchAddRolesRequest {
+  bindId: number
+  roleIds: number[] // 要添加的游戏角色ID数组
+}
+
+// 批量添加角色响应
+export interface BatchAddRolesResponse {
+  success: number // 成功添加数量
+  failed: number // 失败数量
+  skipped: number // 跳过的重复数量
+  total: number // 总数
+  details: {
+    successRoles: number[] // 成功添加的角色ID
+    failedRoles: { roleId: number; reason: string }[] // 失败的角色及原因
+    skippedRoles: number[] // 跳过的重复角色ID
+  }
+  message: string // 总体结果消息
+}
+
 // 游戏角色配置相关
 export interface RoleConfigRequest {
   roleId: number
@@ -110,8 +143,13 @@ export interface ConfigStatusResponse {
 
 export interface GameRoleConfigEntity {
   id?: number
-  userId: number
+  userId?: number // 可选：由后端从 token 解析，前端不传
   roleId: number
+  // 角色信息字段（由后端返回，前端不传）
+  roleName?: string // 角色名称
+  serverName?: string // 服务器名称
+  level?: number // 角色等级
+  power?: number // 战力
   dailyTaskEnabled: number
   autoBattleEnabled: number
   autoUpgradeEnabled: number

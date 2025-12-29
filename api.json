@@ -287,6 +287,36 @@
         }
       }
     },
+    "/user/batch_add_roles": {
+      "post": {
+        "tags": [
+          "user-controller"
+        ],
+        "operationId": "batchAddRoles",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BatchAddRolesRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseBatchAddRolesResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/user/available_roles": {
       "post": {
         "tags": [
@@ -2218,6 +2248,79 @@
           },
           "smsCode": {
             "type": "string"
+          }
+        }
+      },
+      "BatchAddRolesRequest": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "bindId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RoleSelection"
+            }
+          }
+        }
+      },
+      "RoleSelection": {
+        "type": "object",
+        "properties": {
+          "roleId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "serverId": {
+            "type": "string"
+          },
+          "serverName": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "level": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "BaseResponseBatchAddRolesResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "msg": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/BatchAddRolesResponse"
+          }
+        }
+      },
+      "BatchAddRolesResponse": {
+        "type": "object",
+        "properties": {
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "successCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "failedCount": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
