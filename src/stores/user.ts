@@ -71,7 +71,7 @@ export const useUserStore = defineStore('user', () => {
   async function registerAction(registerData: LoginRequest) {
     try {
       const res = await register(registerData)
-      return res.code === 200
+      return res.code === 200 || res.code === 0
     } catch (error) {
       console.error('Register failed:', error)
       return false

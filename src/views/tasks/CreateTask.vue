@@ -55,12 +55,10 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
-import { useUserStore } from '@/stores/user'
 import { useTaskStore } from '@/stores/task'
 import { ElMessage, FormInstance, FormRules } from 'element-plus'
 
 const router = useRouter()
-const userStore = useUserStore()
 const taskStore = useTaskStore()
 
 const taskFormRef = ref<FormInstance>()
