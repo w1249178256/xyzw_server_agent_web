@@ -24,6 +24,7 @@
           </template>
           <el-menu-item index="/accounts">账号列表</el-menu-item>
           <el-menu-item index="/accounts/bind">绑定账号</el-menu-item>
+          <el-menu-item index="/wx-bind">微信绑定</el-menu-item>
         </el-sub-menu>
 
         <el-menu-item index="/config">
@@ -61,6 +62,10 @@
             </div>
             <template #dropdown>
               <el-dropdown-menu>
+                <el-dropdown-item command="wx-bind">
+                  <el-icon><Link /></el-icon>
+                  微信绑定
+                </el-dropdown-item>
                 <el-dropdown-item command="logout">
                   <el-icon><SwitchButton /></el-icon>
                   退出登录
@@ -91,6 +96,7 @@ import {
   Fold,
   Expand,
   ArrowDown,
+  Link,
   SwitchButton
 } from '@element-plus/icons-vue'
 
@@ -107,7 +113,9 @@ function toggleCollapse() {
 }
 
 function handleCommand(command: string) {
-  if (command === 'logout') {
+  if (command === 'wx-bind') {
+    router.push('/wx-bind')
+  } else if (command === 'logout') {
     userStore.logout()
     ElMessage.success('已退出登录')
     router.push('/login')

@@ -18,7 +18,8 @@
       "WebFetch(domain:agents-front.pages.dev)",
       "Bash(powershell -Command:*)",
       "Bash(del \"C:\\\\Users\\\\12491\\\\WebstormProjects\\\\agents-front\\\\dist\\\\_routes.json\")",
-      "Bash(del \"C:\\\\Users\\\\12491\\\\WebstormProjects\\\\agents-front\\\\public\\\\_routes.json\")"
+      "Bash(del \"C:\\\\Users\\\\12491\\\\WebstormProjects\\\\agents-front\\\\public\\\\_routes.json\")",
+      "WebFetch(domain:xyzw.my)"
     ]
   }
 }

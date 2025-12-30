@@ -28,6 +28,12 @@ const routes: RouteRecordRaw[] = [
     meta: { requiresAuth: false, skipLicenseCheck: true }
   },
   {
+    path: '/wx-bind',
+    name: 'WxBind',
+    component: () => import('@/views/auth/WxBind.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
     path: '/',
     component: () => import('@/components/layout/Layout.vue'),
     redirect: '/dashboard',

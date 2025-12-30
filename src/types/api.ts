@@ -25,6 +25,26 @@ export interface LoginWithSmsCodeRequest {
   smsCode: string
 }
 
+// 微信绑定相关
+export interface WxUserInfo {
+  userId: number
+  username: string
+  openId: string
+  nickname: string
+  avatarUrl: string
+  wxBound: boolean
+  token?: string
+}
+
+export interface WxBindRequest {
+  userId?: number
+  code: string
+  openId?: string
+  unionId?: string
+  nickname?: string
+  avatarUrl?: string
+}
+
 // 游戏账号绑定 - 发送验证码
 export interface SendBindSmsCodeRequest {
   phone: string
@@ -303,33 +323,6 @@ export interface TokenResponse {
   code: number
   msg: string
   token: string
-}
-
-// 微信相关类型
-export interface WxLoginRequest {
-  code: string
-  openId?: string
-  unionId?: string
-  nickname?: string
-  avatarUrl?: string
-}
-
-export interface WxBindRequest {
-  code: string
-  openId?: string
-  unionId?: string
-  nickname?: string
-  avatarUrl?: string
-}
-
-export interface WxUserInfo {
-  userId: number
-  username: string
-  openId: string
-  nickname: string
-  avatarUrl: string
-  wxBound: boolean
-  token?: string
 }
 
 // License 相关类型

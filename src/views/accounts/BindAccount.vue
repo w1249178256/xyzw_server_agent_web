@@ -14,95 +14,75 @@
 
       <!-- 步骤1: 验证身份 -->
       <div v-if="currentStep === 0">
-        <!-- 验证方式选择 -->
-        <el-tabs v-model="bindMethod" class="bind-method-tabs">
-          <el-tab-pane label="短信验证" name="sms">
-            <el-alert
-              title="绑定说明"
-              type="info"
-              description="请使用游戏账号绑定的手机号进行验证，验证成功后将自动创建绑定记录"
-              :closable="false"
-              show-icon
-              style="margin-bottom: 20px"
-            />
-            <div v-loading="loading">
-        <el-form
-          ref="phoneFormRef"
-          :model="phoneForm"
-          :rules="phoneRules"
-          label-width="100px"
-          style="max-width: 500px; margin: 0 auto"
-        >
-          <el-form-item label="手机号" prop="phone">
-            <el-input
-              v-model="phoneForm.phone"
-              placeholder="请输入手机号"
-              size="large"
-              maxlength="11"
-              clearable
-            >
-              <template #prefix>
-                <el-icon><Phone /></el-icon>
-              </template>
-            </el-input>
-          </el-form-item>
+        <el-alert
+          title="绑定说明"
+          type="info"
+          description="请使用游戏账号绑定的手机号进行验证，验证成功后将自动创建绑定记录"
+          :closable="false"
+          show-icon
+          style="margin-bottom: 20px"
+        />
+        <div v-loading="loading">
+          <el-form
+            ref="phoneFormRef"
+            :model="phoneForm"
+            :rules="phoneRules"
+            label-width="100px"
+            style="max-width: 500px; margin: 0 auto"
+          >
+            <el-form-item label="手机号" prop="phone">
+              <el-input
+                v-model="phoneForm.phone"
+                placeholder="请输入手机号"
+                size="large"
+                maxlength="11"
+                clearable
+              >
+                <template #prefix>
+                  <el-icon><Phone /></el-icon>
+                </template>
+              </el-input>
+            </el-form-item>
 
-          <el-form-item label="验证码" prop="smsCode">
-            <el-input
-              v-model="phoneForm.smsCode"
-              placeholder="请输入6位验证码"
-              size="large"
-              maxlength="6"
-              clearable
-              style="width: calc(100% - 130px); margin-right: 10px"
-            >
-              <template #prefix>
-                <el-icon><Lock /></el-icon>
-              </template>
-            </el-input>
-            <el-button
-              size="large"
-              style="width: 120px"
-              :disabled="countdown > 0 || !phoneForm.phone"
-              @click="handleSendCode"
-            >
-              {{ countdown > 0 ? `${countdown}秒后重试` : '发送验证码' }}
-            </el-button>
-          </el-form-item>
+            <el-form-item label="验证码" prop="smsCode">
+              <el-input
+                v-model="phoneForm.smsCode"
+                placeholder="请输入6位验证码"
+                size="large"
+                maxlength="6"
+                clearable
+                style="width: calc(100% - 130px); margin-right: 10px"
+              >
+                <template #prefix>
+                  <el-icon><Lock /></el-icon>
+                </template>
+              </el-input>
+              <el-button
+                size="large"
+                style="width: 120px"
+                :disabled="countdown > 0 || !phoneForm.phone"
+                @click="handleSendCode"
+              >
+                {{ countdown > 0 ? `${countdown}秒后重试` : '发送验证码' }}
+              </el-button>
+            </el-form-item>
 
-          <el-form-item>
-            <el-button
-              type="primary"
-              size="large"
-              style="width: 100%"
-              :disabled="!phoneForm.phone || !phoneForm.smsCode"
-              @click="handleBind"
-            >
-              验证并绑定
-            </el-button>
-            <el-button size="large" style="width: 100%; margin-top: 10px" @click="$router.back()">
-              取消
-            </el-button>
-          </el-form-item>
-        </el-form>
-            </div>
-          </el-tab-pane>
-
-          <el-tab-pane label="微信扫码" name="wechat">
-            <el-alert
-              title="微信扫码绑定"
-              type="info"
-              description="使用微信扫描二维码，授权后自动绑定游戏账号"
-              :closable="false"
-              show-icon
-              style="margin-bottom: 20px"
-            />
-            <WeChatQrBind
-              @success="handleWxBindSuccess"
-              @cancel="$router.back()"
-            />
-          </el-tab-pane>
-        </el-tabs>
+            <el-form-item>
+              <el-button
+                type="primary"
+                size="large"
+                style="width: 100%"
+                :disabled="!phoneForm.phone || !phoneForm.smsCode"
+                @click="handleBind"
+              >
+                验证并绑定
+              </el-button>
+              <el-button size="large" style="width: 100%; margin-top: 10px" @click="$router.back()">
+                取消
+              </el-button>
+            </el-form-item>
+          </el-form>
+        </div>
       </div>
 
       <!-- 步骤2: 选择角色 -->
@@ -246,8 +226,7 @@ import { useRouter } from 'vue-router'
 import { useAccountStore } from '@/stores/account'
 import { ElMessage, ElMessageBox, FormInstance, FormRules } from 'element-plus'
 import { Phone, Lock, SuccessFilled } from '@element-plus/icons-vue'
-import WeChatQrBind from '@/components/WeChatQrBind.vue'
-import type { Role, WxUserInfo } from '@/types/api'
+import type { Role } from '@/types/api'
 
 const router = useRouter()
 const accountStore = useAccountStore()
@@ -262,7 +241,6 @@ const loading = ref(false)
 const loadingText = ref('')
 const countdown = ref(0)
 const currentBindId = ref<number | null>(null)
-const bindMethod = ref<'sms' | 'wechat'>('sms') // 绑定方式：短信验证 或 微信扫码
 
 // 角色数据
 const availableRoles = ref<Role[]>([])
@@ -512,39 +490,6 @@ function goToDashboard() {
   router.push('/accounts')
 }
 
-// 微信绑定成功处理
-async function handleWxBindSuccess(_wxUserInfo: WxUserInfo) {
-  ElMessage.success('微信绑定成功')
-
-  // 获取最新的 bindId
-  currentBindId.value = accountStore.getLatestBindId()
-
-  if (currentBindId.value) {
-    // 加载可用角色
-    await loadAvailableRoles()
-  } else {
-    // 如果没有 bindId，可能需要其他处理方式
-    // 例如直接进入完成步骤或显示提示信息
-    ElMessage.info('绑定成功，正在加载角色信息...')
-    // 重新获取绑定列表
-    await accountStore.fetchBindList()
-    currentBindId.value = accountStore.getLatestBindId()
-
-    if (currentBindId.value) {
-      await loadAvailableRoles()
-    } else {
-      ElMessage.warning('绑定成功，但未找到对应的游戏角色')
-      currentStep.value = 2
-      bindResult.value = {
-        total: 0,
-        success: 0,
-        failed: 0,
-        skipped: 0,
-        details: null
-      }
-    }
-  }
-}
 </script>
 
 <style scoped>
@@ -576,22 +521,5 @@ async function handleWxBindSuccess(_wxUserInfo: WxUserInfo) {
 .selection-info strong {
   color: #409eff;
   font-size: 16px;
-}
-
-.bind-method-tabs {
-  margin-bottom: 20px;
-}
-
-.bind-method-tabs :deep(.el-tabs__header) {
-  margin-bottom: 20px;
-}
-
-.bind-method-tabs :deep(.el-tabs__item) {
-  font-size: 16px;
-  padding: 0 30px;
-}
-
-.bind-method-tabs :deep(.el-tabs__item.is-active) {
-  font-weight: 600;
 }
 </style>
