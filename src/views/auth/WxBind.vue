@@ -5,23 +5,15 @@
         <h3 class="title">请使用手机微信扫描二维码授权绑定</h3>
 
         <img
-            v-if="qrImgUrl"
-            class="qrcode"
-            :src="qrImgUrl"
-            alt="微信扫码二维码"
-            @load="onQrLoaded"
+          v-if="qrImgUrl"
+          class="qrcode"
+          :src="qrImgUrl"
+          alt="微信扫码二维码"
+          @load="onQrLoaded"
         />
-        <div v-else-if="wechatAuthUrl" class="qrcode qrcode-frame">
-          <iframe
-              ref="authIframe"
-              class="qr-iframe"
-              :src="wechatAuthUrl"
-              :key="iframeKey"
-              title="微信扫码登录"
-              @load="onIframeLoad"
-          ></iframe>
+        <div v-else class="qrcode qrcode-placeholder">
+          {{ loadingQr ? '二维码加载中...' : '二维码参数缺失' }}
         </div>
-        <div v-else class="qrcode qrcode-placeholder">缺少微信AppID，请检查配置</div>
 
         <div class="sub">{{ appName }}</div>
         <div class="tips">扫码只用于授权，不会登录你的 iPad 微信</div>
@@ -29,9 +21,6 @@
         <div class="actions">
           <button class="btn ghost" @click="cancelLogin">取消绑定</button>
           <button class="btn ghost" @click="refreshQr">刷新二维码</button>
-          <button v-if="wechatAuthUrl" class="btn ghost" @click="openPopup">
-            打开扫码窗口
-          </button>
         </div>
       </div>
 
@@ -64,49 +53,34 @@ const DEFAULT_APP_NAME = '咸鱼之王官方版'
 const FIXED_APP_ID = 'wxfb0d5667e5cb1c44'
 const WX_QR_IMG_BASE = 'https://open.weixin.qq.com/connect/qrcode/'
 const WX_QR_POLL_URL = 'https://long.open.weixin.qq.com/connect/l/qrconnect'
-const WX_QR_CONNECT_URL = 'https://open.weixin.qq.com/connect/app/qrconnect'
-const WX_QR_BUNDLE_ID = 'com.hortor.games.xyzw'
+const WX_QR_CONNECT_API = '/api/wx/qrconnect'
 
 const uuid = ref(
     (route.query.uuid as string) || (import.meta.env.VITE_WX_UUID as string) || ''
 )
 const appid = ref(FIXED_APP_ID)
 const appName = ref(
-    (route.query.appName as string) ||
+  (route.query.appName as string) ||
     (import.meta.env.VITE_WX_APP_NAME as string) ||
     DEFAULT_APP_NAME
 )
 const redirectTo = computed(() => (route.query.redirect as string) || '/accounts')
-const redirectUri = computed(() => `${window.location.origin}/wx-callback`)
 
 const state = ref<'scan' | 'succ' | 'err'>('scan')
 const wxNickname = ref('')
 const errorMsg = ref('')
+const loadingQr = ref(false)
 
 let started = false
 let stopped = false
 let timer: ReturnType<typeof setTimeout> | null = null
-const iframeKey = ref(0)
-const authIframe = ref<HTMLIFrameElement | null>(null)
-let popupWindow: Window | null = null
-let authHandled = false
+let qrFetchController: AbortController | null = null
+const qrImgOverride = ref('')
 
 const qrImgUrl = computed(() => {
+  if (qrImgOverride.value) return qrImgOverride.value
   if (!uuid.value) return ''
   return `${WX_QR_IMG_BASE}${encodeURIComponent(uuid.value)}`
-})
-const wechatAuthUrl = computed(() => {
-  if (uuid.value || !appid.value) return ''
-  const scope = 'snsapi_base,snsapi_userinfo,snsapi_friend,snsapi_message'
-  const stateValue = 'weixin'
-  const query = new URLSearchParams({
-    appid: appid.value,
-    bundleid: WX_QR_BUNDLE_ID,
-    response_type: 'code',
-    scope,
-    state: stateValue
-  })
-  return `${WX_QR_CONNECT_URL}?${query.toString()}#wechat_redirect`
 })
 
 function loadWxScript(url: string) {
@@ -146,14 +120,13 @@ async function handleBind(code: string) {
   } catch (error: any) {
     state.value = 'err'
     errorMsg.value = error?.message || '微信绑定失败，请重试'
-    authHandled = false
   }
 }
 
 async function pollOnce() {
   if (stopped) return
   if (!uuid.value) {
-    if (!wechatAuthUrl.value) {
+    if (!loadingQr.value) {
       state.value = 'err'
       errorMsg.value = '缺少微信二维码参数，请检查页面配置'
     }
@@ -232,56 +205,59 @@ function onQrLoaded() {
   startPolling()
 }
 
-function finalizeAuth(code: string) {
-  if (authHandled) return
-  authHandled = true
-  wxNickname.value = wxNickname.value || '微信用户'
-  state.value = 'succ'
-  handleBind(code)
-}
+async function hydrateFromBackend(force = false) {
+  if (uuid.value && !force) return
+  loadingQr.value = true
+  errorMsg.value = ''
 
-function onIframeLoad() {
-  tryReadAuthCodeFromIframe()
-}
+  if (qrFetchController) {
+    qrFetchController.abort()
+  }
+  const controller = new AbortController()
+  qrFetchController = controller
 
-function tryReadAuthCodeFromIframe() {
-  const frame = authIframe.value
-  if (!frame?.contentWindow) return
   try {
-    const href = frame.contentWindow.location.href
-    if (href && href.startsWith(window.location.origin)) {
-      const url = new URL(href)
-      const code = url.searchParams.get('code')
-      if (code) {
-        finalizeAuth(code)
-      }
+    const res = await fetch(WX_QR_CONNECT_API, { signal: controller.signal })
+    if (!res.ok) {
+      throw new Error('获取二维码失败')
     }
-  } catch (_) {
-    // ignore cross-origin access until redirect back
-  }
-}
+    const payload = await res.json()
+    if (payload?.code !== 0) {
+      throw new Error(payload?.msg || '获取二维码失败')
+    }
+    const data = payload?.data || {}
+    if (!data.uuid) {
+      throw new Error('未解析到二维码参数')
+    }
 
-function handleAuthMessage(event: MessageEvent) {
-  if (event.origin !== window.location.origin) return
-  const data = event.data
-  if (data?.type === 'WX_AUTH_CODE' && data.code) {
-    finalizeAuth(data.code)
-  }
-}
+    uuid.value = data.uuid
+    if (data.appid) {
+      appid.value = data.appid
+    }
+    if (data.appName) {
+      appName.value = data.appName
+    }
+    qrImgOverride.value = data.qrUrl || ''
 
-function openPopup() {
-  if (!wechatAuthUrl.value) return
-  popupWindow?.close()
-  popupWindow = window.open(
-      wechatAuthUrl.value,
-      'wx_oauth',
-      'width=520,height=620,menubar=no,toolbar=no,location=no,status=no,scrollbars=yes'
-  )
+    setTimeout(() => {
+      if (!started) startPolling()
+    }, 3000)
+  } catch (error: any) {
+    if (error?.name === 'AbortError') {
+      return
+    }
+    state.value = 'err'
+    errorMsg.value = error?.message || '二维码加载失败'
+  } finally {
+    if (qrFetchController === controller) {
+      qrFetchController = null
+    }
+    loadingQr.value = false
+  }
 }
 
 function cancelLogin() {
   stopPolling()
-  authHandled = false
   if (appid.value) {
     window.location.href = `${appid.value}://oauth11?code=`
     return
@@ -294,45 +270,31 @@ function reload() {
 }
 
 onMounted(() => {
-  if (uuid.value) {
-    setTimeout(() => {
-      if (!started) startPolling()
-    }, 3000)
-  }
-
-  window.addEventListener('message', handleAuthMessage)
+  hydrateFromBackend()
 
   if (window.WeixinJSBridge?.invoke) {
     window.WeixinJSBridge.invoke(
-        'setNavigationBarColor',
-        {color: '#F3F3F3'},
-        () => {
-        }
+      'setNavigationBarColor',
+      {color: '#F3F3F3'},
+      () => {}
     )
   }
 })
 
 onBeforeUnmount(() => {
   stopPolling()
-  popupWindow?.close()
-  window.removeEventListener('message', handleAuthMessage)
+  qrFetchController?.abort()
 })
 
-function refreshQr() {
+async function refreshQr() {
   stopPolling()
   started = false
   stopped = false
+  uuid.value = ''
+  qrImgOverride.value = ''
   wxNickname.value = ''
   state.value = 'scan'
-  authHandled = false
-
-  if (uuid.value) {
-    window.location.reload()
-    return
-  }
-
-  iframeKey.value += 1
-  popupWindow?.close()
+  await hydrateFromBackend(true)
 }
 </script>
 
@@ -373,19 +335,6 @@ function refreshQr() {
 
 .qrcode-placeholder {
   border: 1px dashed #dcdfe6;
-}
-
-.qrcode-frame {
-  padding: 0;
-  background: transparent;
-}
-
-.qr-iframe {
-  width: 100%;
-  height: 100%;
-  border: 0;
-  border-radius: 10px;
-  background: #fff;
 }
 
 .sub {
