@@ -12,45 +12,122 @@
       <el-button @click="$router.back()">返回</el-button>
     </div>
 
-    <el-card v-loading="loading">
-      <div class="config-section">
-        <h3>基础功能</h3>
-        <el-form label-width="120px">
-          <el-form-item label="每日任务">
-            <el-switch v-model="config.dailyTaskEnabled" :active-value="1" :inactive-value="0" />
-          </el-form-item>
-          <el-form-item label="自动战斗">
-            <el-switch v-model="config.autoBattleEnabled" :active-value="1" :inactive-value="0" />
-          </el-form-item>
-          <el-form-item label="自动升级">
-            <el-switch v-model="config.autoUpgradeEnabled" :active-value="1" :inactive-value="0" />
-          </el-form-item>
-          <el-form-item label="瓶子功能">
-            <el-switch v-model="config.bottleEnabled" :active-value="1" :inactive-value="0" />
-          </el-form-item>
-          <el-form-item label="竞技场">
-            <el-switch v-model="config.arenaEnabled" :active-value="1" :inactive-value="0" />
-          </el-form-item>
-          <el-form-item label="军团">
-            <el-switch v-model="config.legionEnabled" :active-value="1" :inactive-value="0" />
-          </el-form-item>
-          <el-form-item label="噩梦">
-            <el-switch v-model="config.nightmareEnabled" :active-value="1" :inactive-value="0" />
-          </el-form-item>
-          <el-form-item label="好友批量">
-            <el-switch v-model="config.friendBatchEnabled" :active-value="1" :inactive-value="0" />
-          </el-form-item>
-          <el-form-item label="商店自动购买">
-            <el-switch v-model="config.storeAutoBuyEnabled" :active-value="1" :inactive-value="0" />
-          </el-form-item>
-          <el-form-item label="配置状态">
-            <el-switch v-model="config.configStatus" :active-value="1" :inactive-value="0" />
-          </el-form-item>
-        </el-form>
+    <el-row :gutter="20">
+      <!-- 左侧：基础功能配置 -->
+      <el-col :span="14">
+        <el-card v-loading="loading">
+          <div class="config-section">
+            <h3>基础功能</h3>
+            <el-form label-width="120px">
+              <el-form-item label="每日任务">
+                <el-switch v-model="config.dailyTaskEnabled" :active-value="1" :inactive-value="0" />
+              </el-form-item>
+              <el-form-item label="自动战斗">
+                <el-switch v-model="config.autoBattleEnabled" :active-value="1" :inactive-value="0" />
+              </el-form-item>
+              <el-form-item label="自动升级">
+                <el-switch v-model="config.autoUpgradeEnabled" :active-value="1" :inactive-value="0" />
+              </el-form-item>
+              <el-form-item label="瓶子功能">
+                <el-switch v-model="config.bottleEnabled" :active-value="1" :inactive-value="0" />
+              </el-form-item>
+              <el-form-item label="竞技场">
+                <el-switch v-model="config.arenaEnabled" :active-value="1" :inactive-value="0" />
+              </el-form-item>
+              <el-form-item label="军团">
+                <el-switch v-model="config.legionEnabled" :active-value="1" :inactive-value="0" />
+              </el-form-item>
+              <el-form-item label="噩梦">
+                <el-switch v-model="config.nightmareEnabled" :active-value="1" :inactive-value="0" />
+              </el-form-item>
+              <el-form-item label="好友批量">
+                <el-switch v-model="config.friendBatchEnabled" :active-value="1" :inactive-value="0" />
+              </el-form-item>
+              <el-form-item label="商店自动购买">
+                <el-switch v-model="config.storeAutoBuyEnabled" :active-value="1" :inactive-value="0" />
+              </el-form-item>
+              <el-form-item label="配置状态">
+                <el-switch v-model="config.configStatus" :active-value="1" :inactive-value="0" />
+              </el-form-item>
+            </el-form>
 
-        <el-button type="primary" @click="saveConfig">保存配置</el-button>
-      </div>
-    </el-card>
+            <el-button type="primary" @click="saveConfig">保存配置</el-button>
+          </div>
+        </el-card>
+      </el-col>
+
+      <!-- 右侧：Token 授权 -->
+      <el-col :span="10">
+        <el-card v-loading="tokenLoading">
+          <div class="config-section">
+            <h3>授权 Token</h3>
+            <el-alert
+              type="warning"
+              :closable="false"
+              show-icon
+              class="mb-15"
+            >
+              <template #title>
+                开启后将生成一个授权链接，可用于第三方工具调用游戏接口
+              </template>
+            </el-alert>
+
+            <el-form label-width="100px">
+              <el-form-item label="启用授权">
+                <el-switch
+                  v-model="tokenEnabled"
+                  :loading="tokenSwitching"
+                  @change="handleTokenSwitch"
+                />
+              </el-form-item>
+            </el-form>
+
+            <div v-if="tokenEnabled && roleKey" class="token-url-section">
+              <div class="token-label">授权链接</div>
+              <div class="token-url-box">
+                <el-input
+                  v-model="tokenUrl"
+                  readonly
+                  size="small"
+                >
+                  <template #append>
+                    <el-button @click="copyTokenUrl">
+                      <el-icon><DocumentCopy /></el-icon>
+                    </el-button>
+                  </template>
+                </el-input>
+              </div>
+              <div class="token-tips">
+                <el-text type="info" size="small">
+                  请妥善保管此链接，不要泄露给他人
+                </el-text>
+              </div>
+
+              <el-divider />
+
+              <div class="token-label">快速获取 Token</div>
+              <el-button type="primary" size="small" @click="fetchAndShowToken">
+                获取当前 Token
+              </el-button>
+              <div v-if="currentToken" class="current-token">
+                <el-input
+                  v-model="currentToken"
+                  type="textarea"
+                  :rows="3"
+                  readonly
+                  size="small"
+                />
+                <el-button size="small" class="mt-10" @click="copyCurrentToken">
+                  复制 Token
+                </el-button>
+              </div>
+            </div>
+
+            <el-empty v-else-if="!tokenEnabled" description="授权未启用" :image-size="60" />
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -58,12 +135,28 @@
 import { ref, reactive, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { getRoleConfig, saveRoleConfig as saveConfigAPI } from '@/api/modules/roleConfig'
-import { ElMessage } from 'element-plus'
+import { initRoleKey, deleteRoleKey, getToken, getRoleKeyList } from '@/api/modules/game'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import { DocumentCopy } from '@element-plus/icons-vue'
 import type { GameRoleConfigEntity } from '@/types/api'
 
 const route = useRoute()
 const roleId = ref(Number(route.params.roleId))
 const loading = ref(false)
+
+// Token 相关状态
+const tokenLoading = ref(false)
+const tokenSwitching = ref(false)
+const tokenEnabled = ref(false)
+const roleKey = ref('')
+const currentToken = ref('')
+
+// 生成授权 URL
+const tokenUrl = computed(() => {
+  if (!roleKey.value) return ''
+  const baseUrl = window.location.origin
+  return `${baseUrl}/api/game/getToken/${roleKey.value}`
+})
 
 // 角色标题显示
 const roleTitle = computed(() => {
@@ -89,7 +182,10 @@ const config = reactive<GameRoleConfigEntity>({
 })
 
 onMounted(async () => {
-  await loadConfig()
+  await Promise.all([
+    loadConfig(),
+    loadRoleKeyStatus()
+  ])
 })
 
 async function loadConfig() {
@@ -105,6 +201,133 @@ async function loadConfig() {
     ElMessage.error('加载配置失败')
   } finally {
     loading.value = false
+  }
+}
+
+// 加载角色 Key 状态
+async function loadRoleKeyStatus() {
+  tokenLoading.value = true
+  try {
+    const res = await getRoleKeyList({})
+    if (res.data) {
+      // 查找当前角色是否有 key
+      const found = res.data.find((item: any) =>
+        item.roleId === roleId.value || item.roleName === config.roleName
+      )
+      if (found?.key) {
+        tokenEnabled.value = true
+        roleKey.value = found.key
+      }
+    }
+  } catch (error) {
+    console.error('加载 roleKey 状态失败:', error)
+  } finally {
+    tokenLoading.value = false
+  }
+}
+
+// 处理 Token 开关切换
+async function handleTokenSwitch(val: boolean) {
+  if (val) {
+    // 启用授权
+    await enableToken()
+  } else {
+    // 禁用授权
+    try {
+      await ElMessageBox.confirm(
+        '关闭授权后，之前生成的链接将失效，确定要关闭吗？',
+        '确认关闭',
+        {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }
+      )
+      await disableToken()
+    } catch {
+      // 用户取消，恢复开关状态
+      tokenEnabled.value = true
+    }
+  }
+}
+
+async function enableToken() {
+  tokenSwitching.value = true
+  try {
+    const res = await initRoleKey({ roleId: roleId.value })
+    if (res.code === 0 && res.data?.key) {
+      roleKey.value = res.data.key
+      ElMessage.success('授权已启用')
+    } else {
+      tokenEnabled.value = false
+      ElMessage.error(res.msg || '启用授权失败')
+    }
+  } catch (error) {
+    tokenEnabled.value = false
+    ElMessage.error('启用授权失败')
+  } finally {
+    tokenSwitching.value = false
+  }
+}
+
+async function disableToken() {
+  tokenSwitching.value = true
+  try {
+    const res = await deleteRoleKey({ roleId: roleId.value })
+    if (res.code === 0) {
+      roleKey.value = ''
+      currentToken.value = ''
+      ElMessage.success('授权已关闭')
+    } else {
+      tokenEnabled.value = true
+      ElMessage.error(res.msg || '关闭授权失败')
+    }
+  } catch (error) {
+    tokenEnabled.value = true
+    ElMessage.error('关闭授权失败')
+  } finally {
+    tokenSwitching.value = false
+  }
+}
+
+// 获取并显示当前 Token
+async function fetchAndShowToken() {
+  if (!roleKey.value) {
+    ElMessage.warning('请先启用授权')
+    return
+  }
+  tokenLoading.value = true
+  try {
+    const res = await getToken(roleKey.value)
+    if (res.code === 0 && res.token) {
+      currentToken.value = res.token
+    } else {
+      ElMessage.error(res.msg || '获取 Token 失败')
+    }
+  } catch (error) {
+    ElMessage.error('获取 Token 失败')
+  } finally {
+    tokenLoading.value = false
+  }
+}
+
+// 复制授权链接
+async function copyTokenUrl() {
+  try {
+    await navigator.clipboard.writeText(tokenUrl.value)
+    ElMessage.success('链接已复制')
+  } catch {
+    ElMessage.error('复制失败，请手动复制')
+  }
+}
+
+// 复制当前 Token
+async function copyCurrentToken() {
+  try {
+    await navigator.clipboard.writeText(currentToken.value)
+    ElMessage.success('Token 已复制')
+  } catch {
+    ElMessage.error('复制失败，请手动复制')
   }
 }
 
@@ -153,5 +376,37 @@ function formatPower(power: number): string {
   color: #303133;
   font-size: 16px;
   font-weight: 600;
+}
+
+/* Token 授权部分样式 */
+.mb-15 {
+  margin-bottom: 15px;
+}
+
+.mt-10 {
+  margin-top: 10px;
+}
+
+.token-url-section {
+  margin-top: 16px;
+}
+
+.token-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #606266;
+  margin-bottom: 8px;
+}
+
+.token-url-box {
+  margin-bottom: 8px;
+}
+
+.token-tips {
+  margin-bottom: 10px;
+}
+
+.current-token {
+  margin-top: 12px;
 }
 </style>

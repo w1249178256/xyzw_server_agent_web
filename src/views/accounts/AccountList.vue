@@ -2,11 +2,36 @@
   <div class="page-container">
     <div class="page-header">
       <h2 class="page-title">游戏账号列表</h2>
-      <el-button type="primary" @click="$router.push('/accounts/bind')">
+      <el-button type="primary" @click="showBindDialog">
         <el-icon><Plus /></el-icon>
         绑定账号
       </el-button>
     </div>
+
+    <!-- 绑定方式选择对话框 -->
+    <el-dialog
+      v-model="bindMethodDialogVisible"
+      title="选择绑定方式"
+      width="400px"
+      :close-on-click-modal="true"
+    >
+      <div class="bind-method-options">
+        <div class="bind-method-card" @click="goToBind('sms')">
+          <el-icon class="method-icon" :size="40"><Iphone /></el-icon>
+          <div class="method-info">
+            <h4>手机验证码</h4>
+            <p>使用游戏绑定的手机号验证</p>
+          </div>
+        </div>
+        <div class="bind-method-card" @click="goToBind('wx')">
+          <el-icon class="method-icon wechat" :size="40"><ChatDotRound /></el-icon>
+          <div class="method-info">
+            <h4>微信扫码</h4>
+            <p>使用微信扫码授权绑定</p>
+          </div>
+        </div>
+      </div>
+    </el-dialog>
 
     <el-card v-loading="accountStore.loading">
       <el-table :data="accountStore.bindList" style="width: 100%">
@@ -30,13 +55,10 @@
             <el-text v-else type="info" size="small">暂无角色，请点击"查看角色"加载</el-text>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="350">
+        <el-table-column label="操作" width="220">
           <template #default="{ row }">
             <el-button type="primary" size="small" @click="viewRoles(row.bindId)">
               查看角色
-            </el-button>
-            <el-button type="success" size="small" @click="syncRoles(row.bindId)">
-              同步角色
             </el-button>
             <el-button type="warning" size="small" @click="manageRoles(row.bindId)">
               管理角色
@@ -194,14 +216,24 @@ import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAccountStore } from '@/stores/account'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { Plus } from '@element-plus/icons-vue'
+import { Plus, Iphone, ChatDotRound } from '@element-plus/icons-vue'
 import type { Role } from '@/types/api'
 
 const router = useRouter()
 const accountStore = useAccountStore()
 
+const bindMethodDialogVisible = ref(false)
 const rolesDialogVisible = ref(false)
 const manageDialogVisible = ref(false)
+
+function showBindDialog() {
+  bindMethodDialogVisible.value = true
+}
+
+function goToBind(method: 'sms' | 'wx') {
+  bindMethodDialogVisible.value = false
+  router.push({ path: '/wx-bind', query: { tab: method } })
+}
 const currentRoles = ref<any[]>([])
 const currentBindId = ref<number>(0)
 const loadingAvailable = ref(false)
@@ -225,15 +257,6 @@ async function viewRoles(bindId: number) {
   const roles = await accountStore.fetchRoles(bindId)
   currentRoles.value = roles
   rolesDialogVisible.value = true
-}
-
-async function syncRoles(bindId: number) {
-  const success = await accountStore.syncRoles(bindId)
-  if (success) {
-    ElMessage.success('同步成功')
-  } else {
-    ElMessage.error('同步失败')
-  }
 }
 
 async function manageRoles(bindId: number) {
@@ -290,31 +313,26 @@ async function batchBindRoles() {
       }
     )
 
-    const roleIds = selectedRoles.value.map(role => role.roleId)
+    const roleSelections = selectedRoles.value.map(role => ({
+      gameRoleId: role.roleId,
+      serverId: role.serverId
+    }))
     const result = await accountStore.batchBindRoles({
       bindId: currentBindId.value,
-      roleIds
+      roleSelections
     })
 
     if (result) {
       // 显示详细结果
       const messages = [
-        `总计: ${result.total} 个角色`,
-        `成功: ${result.success} 个`,
-        `跳过: ${result.skipped} 个`,
-        `失败: ${result.failed} 个`
+        `总计: ${result.totalCount} 个角色`,
+        `成功: ${result.successCount} 个`,
+        `失败: ${result.failedCount} 个`
       ]
-
-      if (result.failed > 0 && result.details.failedRoles.length > 0) {
-        messages.push('\n失败原因:')
-        result.details.failedRoles.forEach(item => {
-          messages.push(`- 角色ID ${item.roleId}: ${item.reason}`)
-        })
-      }
 
       ElMessageBox.alert(messages.join('\n'), '批量绑定结果', {
         confirmButtonText: '确定',
-        type: result.failed > 0 ? 'warning' : 'success'
+        type: result.failedCount > 0 ? 'warning' : 'success'
       })
 
       // 清空选择
@@ -425,5 +443,50 @@ function goToConfig(roleId: number) {
 .selection-info {
   color: #606266;
   font-size: 14px;
+}
+
+/* 绑定方式选择对话框 */
+.bind-method-options {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.bind-method-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  border: 1px solid #e4e7ed;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.bind-method-card:hover {
+  border-color: #409eff;
+  background-color: #f5f7fa;
+}
+
+.method-icon {
+  color: #409eff;
+  flex-shrink: 0;
+}
+
+.method-icon.wechat {
+  color: #07c160;
+}
+
+.method-info h4 {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #303133;
+}
+
+.method-info p {
+  margin: 0;
+  font-size: 13px;
+  color: #909399;
 }
 </style>

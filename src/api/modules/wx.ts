@@ -3,7 +3,7 @@ import type { BaseRequest, BaseResponse, WxBindRequest, WxUserInfo } from '@/typ
 
 export function wxBind(data: WxBindRequest): Promise<BaseResponse<WxUserInfo>> {
   return request({
-    url: '/user/wx_bind',
+    url: '/user/bindWithWxCode',
     method: 'post',
     data
   })

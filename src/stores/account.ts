@@ -20,6 +20,7 @@ import type {
   AddRoleRequest,
   BatchAddRolesRequest,
   BatchAddRolesResponse,
+  RoleSelection,
   SendBindSmsCodeRequest,
   BindWithSmsCodeRequest
 } from '@/types/api'

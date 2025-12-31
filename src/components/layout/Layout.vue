@@ -17,15 +17,10 @@
           <template #title>仪表板</template>
         </el-menu-item>
 
-        <el-sub-menu index="/accounts">
-          <template #title>
-            <el-icon><User /></el-icon>
-            <span>游戏账号</span>
-          </template>
-          <el-menu-item index="/accounts">账号列表</el-menu-item>
-          <el-menu-item index="/accounts/bind">绑定账号</el-menu-item>
-          <el-menu-item index="/wx-bind">微信绑定</el-menu-item>
-        </el-sub-menu>
+        <el-menu-item index="/accounts">
+          <el-icon><User /></el-icon>
+          <template #title>游戏账号</template>
+        </el-menu-item>
 
         <el-menu-item index="/config">
           <el-icon><Setting /></el-icon>

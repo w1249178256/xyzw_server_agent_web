@@ -112,34 +112,30 @@ export interface Role {
 export interface AddRoleRequest {
   bindId: number
   gameRoleId: number
-  serverId: number
-  serverName: string
-  roleName: string
-  roleLevel: number
+  serverId: string
 }
 
 export interface DeleteRoleRequest {
   roleId: number
 }
 
+// 角色选择项
+export interface RoleSelection {
+  gameRoleId: number
+  serverId: string
+}
+
 // 批量添加角色请求
 export interface BatchAddRolesRequest {
   bindId: number
-  roleIds: number[] // 要添加的游戏角色ID数组
+  roleSelections: RoleSelection[]
 }
 
 // 批量添加角色响应
 export interface BatchAddRolesResponse {
-  success: number // 成功添加数量
-  failed: number // 失败数量
-  skipped: number // 跳过的重复数量
-  total: number // 总数
-  details: {
-    successRoles: number[] // 成功添加的角色ID
-    failedRoles: { roleId: number; reason: string }[] // 失败的角色及原因
-    skippedRoles: number[] // 跳过的重复角色ID
-  }
-  message: string // 总体结果消息
+  totalCount: number
+  successCount: number
+  failedCount: number
 }
 
 // 游戏角色配置相关

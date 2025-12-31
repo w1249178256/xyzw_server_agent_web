@@ -438,25 +438,34 @@ async function handleBatchBind() {
     loading.value = true
     loadingText.value = '正在批量绑定角色...'
 
-    const roleIds = selectedRoles.value.map(role => role.roleId)
+    const roleSelections = selectedRoles.value.map(role => ({
+      gameRoleId: role.roleId,
+      serverId: role.serverId
+    }))
     const result = await accountStore.batchBindRoles({
       bindId: currentBindId.value!,
-      roleIds
+      roleSelections
     })
 
     if (result) {
       // 保存绑定结果
-      bindResult.value = result
+      bindResult.value = {
+        total: result.totalCount,
+        success: result.successCount,
+        failed: result.failedCount,
+        skipped: 0,
+        details: null
+      }
 
       // 获取已绑定的角色列表
       const roles = await accountStore.fetchRoles(currentBindId.value!)
       boundRoles.value = roles
 
       // 显示结果
-      if (result.failed === 0) {
-        ElMessage.success(`成功绑定 ${result.success} 个角色`)
+      if (result.failedCount === 0) {
+        ElMessage.success(`成功绑定 ${result.successCount} 个角色`)
       } else {
-        ElMessage.warning(`绑定完成，成功 ${result.success} 个，失败 ${result.failed} 个`)
+        ElMessage.warning(`绑定完成，成功 ${result.successCount} 个，失败 ${result.failedCount} 个`)
       }
 
       // 进入完成步骤

@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:7001",
+      "url": "http://114.55.25.68:7001",
       "description": "Generated server url"
     }
   ],
@@ -17,126 +17,6 @@
     }
   ],
   "paths": {
-    "/user/wx_unbind": {
-      "post": {
-        "tags": [
-          "user-controller"
-        ],
-        "operationId": "wxUnbind",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/BaseRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseString"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/user/wx_login": {
-      "post": {
-        "tags": [
-          "user-controller"
-        ],
-        "operationId": "wxLogin",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/WxLoginRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseWxUserInfo"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/user/wx_bind_status": {
-      "post": {
-        "tags": [
-          "user-controller"
-        ],
-        "operationId": "wxBindStatus",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/BaseRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseWxUserInfo"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/user/wx_bind": {
-      "post": {
-        "tags": [
-          "user-controller"
-        ],
-        "operationId": "wxBind",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/WxBindRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseWxUserInfo"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/user/sync_role_data": {
       "post": {
         "tags": [
@@ -370,6 +250,36 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/BaseResponseString"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/bindWithWxCode": {
+      "post": {
+        "tags": [
+          "user-controller"
+        ],
+        "operationId": "bindWithWxCode",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginWithWxCodeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseObject"
                 }
               }
             }
@@ -850,6 +760,194 @@
                 "additionalProperties": {
                   "type": "string"
                 }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ip-management/whitelist/remove/{ip}": {
+      "post": {
+        "tags": [
+          "ip-management-controller"
+        ],
+        "operationId": "removeFromWhitelist",
+        "parameters": [
+          {
+            "name": "ip",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ip-management/whitelist/add/{ip}": {
+      "post": {
+        "tags": [
+          "ip-management-controller"
+        ],
+        "operationId": "addToWhitelist",
+        "parameters": [
+          {
+            "name": "ip",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ip-management/unban/{ip}": {
+      "post": {
+        "tags": [
+          "ip-management-controller"
+        ],
+        "operationId": "unbanIp",
+        "parameters": [
+          {
+            "name": "ip",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ip-management/reset-count/{ip}": {
+      "post": {
+        "tags": [
+          "ip-management-controller"
+        ],
+        "operationId": "resetErrorCount",
+        "parameters": [
+          {
+            "name": "ip",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ip-management/clean-expired": {
+      "post": {
+        "tags": [
+          "ip-management-controller"
+        ],
+        "operationId": "cleanExpiredBans",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ip-management/ban": {
+      "post": {
+        "tags": [
+          "ip-management-controller"
+        ],
+        "operationId": "banIp",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BanRequest"
               }
             }
           },
@@ -1411,187 +1509,19 @@
         }
       }
     },
-    "/api/ip-management/whitelist/remove/{ip}": {
-      "post": {
+    "/wx/qrconnect": {
+      "get": {
         "tags": [
-          "ip-management-controller"
+          "wx-controller"
         ],
-        "operationId": "removeFromWhitelist",
-        "parameters": [
-          {
-            "name": "ip",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
+        "operationId": "qrconnect",
         "responses": {
           "200": {
             "description": "OK",
             "content": {
               "*/*": {
                 "schema": {
-                  "type": "object",
-                  "additionalProperties": {
-                    "type": "object"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/ip-management/whitelist/add/{ip}": {
-      "post": {
-        "tags": [
-          "ip-management-controller"
-        ],
-        "operationId": "addToWhitelist",
-        "parameters": [
-          {
-            "name": "ip",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "object",
-                  "additionalProperties": {
-                    "type": "object"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/ip-management/unban/{ip}": {
-      "post": {
-        "tags": [
-          "ip-management-controller"
-        ],
-        "operationId": "unbanIp",
-        "parameters": [
-          {
-            "name": "ip",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "object",
-                  "additionalProperties": {
-                    "type": "object"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/ip-management/reset-count/{ip}": {
-      "post": {
-        "tags": [
-          "ip-management-controller"
-        ],
-        "operationId": "resetErrorCount",
-        "parameters": [
-          {
-            "name": "ip",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "object",
-                  "additionalProperties": {
-                    "type": "object"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/ip-management/clean-expired": {
-      "post": {
-        "tags": [
-          "ip-management-controller"
-        ],
-        "operationId": "cleanExpiredBans",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "object",
-                  "additionalProperties": {
-                    "type": "object"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/ip-management/ban": {
-      "post": {
-        "tags": [
-          "ip-management-controller"
-        ],
-        "operationId": "banIp",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/BanRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "object",
-                  "additionalProperties": {
-                    "type": "object"
-                  }
+                  "$ref": "#/components/schemas/BaseResponseWxQrConnectResponse"
                 }
               }
             }
@@ -1628,6 +1558,85 @@
           "license-controller"
         ],
         "operationId": "getServiceInfo",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ip-management/statistics": {
+      "get": {
+        "tags": [
+          "ip-management-controller"
+        ],
+        "operationId": "getStatistics",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ip-management/error-count/{ip}": {
+      "get": {
+        "tags": [
+          "ip-management-controller"
+        ],
+        "operationId": "getErrorCount",
+        "parameters": [
+          {
+            "name": "ip",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ip-management/banned": {
+      "get": {
+        "tags": [
+          "ip-management-controller"
+        ],
+        "operationId": "getBannedIps",
         "responses": {
           "200": {
             "description": "OK",
@@ -1759,85 +1768,6 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/BaseResponseSchedulerConfig"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/ip-management/statistics": {
-      "get": {
-        "tags": [
-          "ip-management-controller"
-        ],
-        "operationId": "getStatistics",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "object",
-                  "additionalProperties": {
-                    "type": "object"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/ip-management/error-count/{ip}": {
-      "get": {
-        "tags": [
-          "ip-management-controller"
-        ],
-        "operationId": "getErrorCount",
-        "parameters": [
-          {
-            "name": "ip",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "object",
-                  "additionalProperties": {
-                    "type": "object"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/ip-management/banned": {
-      "get": {
-        "tags": [
-          "ip-management-controller"
-        ],
-        "operationId": "getBannedIps",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "object",
-                  "additionalProperties": {
-                    "type": "object"
-                  }
                 }
               }
             }
@@ -2275,10 +2205,14 @@
   },
   "components": {
     "schemas": {
-      "BaseRequest": {
+      "SyncRoleDataRequest": {
         "type": "object",
         "properties": {
           "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "bindId": {
             "type": "integer",
             "format": "int64"
           }
@@ -2296,105 +2230,6 @@
           },
           "data": {
             "type": "string"
-          }
-        }
-      },
-      "WxLoginRequest": {
-        "type": "object",
-        "properties": {
-          "code": {
-            "type": "string"
-          },
-          "openId": {
-            "type": "string"
-          },
-          "unionId": {
-            "type": "string"
-          },
-          "nickname": {
-            "type": "string"
-          },
-          "avatarUrl": {
-            "type": "string"
-          }
-        }
-      },
-      "BaseResponseWxUserInfo": {
-        "type": "object",
-        "properties": {
-          "code": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "msg": {
-            "type": "string"
-          },
-          "data": {
-            "$ref": "#/components/schemas/WxUserInfo"
-          }
-        }
-      },
-      "WxUserInfo": {
-        "type": "object",
-        "properties": {
-          "userId": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "username": {
-            "type": "string"
-          },
-          "openId": {
-            "type": "string"
-          },
-          "nickname": {
-            "type": "string"
-          },
-          "avatarUrl": {
-            "type": "string"
-          },
-          "wxBound": {
-            "type": "boolean"
-          },
-          "token": {
-            "type": "string"
-          }
-        }
-      },
-      "WxBindRequest": {
-        "type": "object",
-        "properties": {
-          "userId": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "code": {
-            "type": "string"
-          },
-          "openId": {
-            "type": "string"
-          },
-          "unionId": {
-            "type": "string"
-          },
-          "nickname": {
-            "type": "string"
-          },
-          "avatarUrl": {
-            "type": "string"
-          }
-        }
-      },
-      "SyncRoleDataRequest": {
-        "type": "object",
-        "properties": {
-          "userId": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "bindId": {
-            "type": "integer",
-            "format": "int64"
           }
         }
       },
@@ -2456,6 +2291,15 @@
         "properties": {
           "token": {
             "type": "string"
+          }
+        }
+      },
+      "BaseRequest": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
           }
         }
       },
@@ -2583,6 +2427,18 @@
           }
         }
       },
+      "LoginWithWxCodeRequest": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "code": {
+            "type": "string"
+          }
+        }
+      },
       "LoginWithSmsCodeRequest": {
         "type": "object",
         "properties": {
@@ -2601,41 +2457,41 @@
       "BatchAddRolesRequest": {
         "type": "object",
         "properties": {
-          "userId": {
-            "type": "integer",
-            "format": "int64"
-          },
           "bindId": {
             "type": "integer",
             "format": "int64"
           },
-          "roles": {
+          "roleSelections": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/RoleSelection"
             }
           }
-        }
+        },
+        "required": ["bindId", "roleSelections"]
       },
       "RoleSelection": {
         "type": "object",
         "properties": {
-          "roleId": {
+          "gameRoleId": {
             "type": "integer",
             "format": "int64"
           },
           "serverId": {
             "type": "string"
-          },
-          "serverName": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "level": {
+          }
+        },
+        "required": ["gameRoleId", "serverId"]
+      },
+      "RoleIdentifier": {
+        "type": "object",
+        "properties": {
+          "gameRoleId": {
             "type": "integer",
-            "format": "int32"
+            "format": "int64"
+          },
+          "serverId": {
+            "type": "string"
           }
         }
       },
@@ -2728,10 +2584,6 @@
       "AddRoleRequest": {
         "type": "object",
         "properties": {
-          "userId": {
-            "type": "integer",
-            "format": "int64"
-          },
           "bindId": {
             "type": "integer",
             "format": "int64"
@@ -2741,20 +2593,10 @@
             "format": "int64"
           },
           "serverId": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "serverName": {
             "type": "string"
-          },
-          "roleName": {
-            "type": "string"
-          },
-          "roleLevel": {
-            "type": "integer",
-            "format": "int32"
           }
-        }
+        },
+        "required": ["bindId", "gameRoleId", "serverId"]
       },
       "ConfigStatusRequest": {
         "type": "object",
@@ -3049,6 +2891,17 @@
           }
         }
       },
+      "BanRequest": {
+        "type": "object",
+        "properties": {
+          "ip": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          }
+        }
+      },
       "CharmBuyTaskRequest": {
         "type": "object",
         "properties": {
@@ -3306,13 +3159,34 @@
           }
         }
       },
-      "BanRequest": {
+      "BaseResponseWxQrConnectResponse": {
         "type": "object",
         "properties": {
-          "ip": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "msg": {
             "type": "string"
           },
-          "reason": {
+          "data": {
+            "$ref": "#/components/schemas/WxQrConnectResponse"
+          }
+        }
+      },
+      "WxQrConnectResponse": {
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type": "string"
+          },
+          "appid": {
+            "type": "string"
+          },
+          "appName": {
+            "type": "string"
+          },
+          "qrUrl": {
             "type": "string"
           }
         }

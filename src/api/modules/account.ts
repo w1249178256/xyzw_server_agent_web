@@ -64,7 +64,7 @@ export function getGameRole(data: BindRoleResult): Promise<BaseResponse<RoleBody
 
 export function syncRoleData(data: SyncRoleDataRequest): Promise<BaseResponse<string>> {
   return request({
-    url: '/user/sync_role_data',
+    url: '/user/available_roles',
     method: 'post',
     data
   })
