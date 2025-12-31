@@ -3,10 +3,10 @@
     <div class="page-header">
       <div>
         <h2 class="page-title">{{ roleTitle }}</h2>
-        <p v-if="config.serverName" class="role-subtitle">
-          {{ config.serverName }}
-          <span v-if="config.level"> · Lv.{{ config.level }}</span>
-          <span v-if="config.power" class="power-text"> · ⚔️{{ formatPower(config.power) }}</span>
+        <p v-if="roleInfo?.serverName || config.serverName" class="role-subtitle">
+          {{ roleInfo?.serverName || config.serverName }}
+          <span v-if="roleInfo?.level || config.level"> · Lv.{{ roleInfo?.level || config.level }}</span>
+          <span v-if="roleInfo?.power || config.power" class="power-text"> · ⚔️{{ formatPower(roleInfo?.power || config.power || 0) }}</span>
         </p>
       </div>
       <el-button @click="$router.back()">返回</el-button>
@@ -50,7 +50,43 @@
                 <el-switch v-model="config.configStatus" :active-value="1" :inactive-value="0" />
               </el-form-item>
             </el-form>
+          </div>
 
+          <el-divider />
+
+          <!-- 任务调度配置 -->
+          <div class="config-section">
+            <h3>任务调度</h3>
+            <el-form label-width="120px">
+              <el-form-item label="每日任务时间">
+                <el-time-picker
+                  v-model="dailyTaskTime"
+                  format="HH:mm"
+                  value-format="HH:mm"
+                  placeholder="选择执行时间"
+                  style="width: 140px"
+                />
+                <span class="form-tip">每天该时间自动执行每日任务</span>
+              </el-form-item>
+
+              <el-form-item label="挂机续费">
+                <el-switch v-model="config.battleRenewalEnabled" :active-value="1" :inactive-value="0" />
+              </el-form-item>
+
+              <el-form-item v-if="config.battleRenewalEnabled === 1" label="续费间隔">
+                <el-input-number
+                  v-model="config.battleRenewalInterval"
+                  :min="5"
+                  :max="1440"
+                  :step="5"
+                  style="width: 140px"
+                />
+                <span class="form-tip">分钟（建议 30-60 分钟）</span>
+              </el-form-item>
+            </el-form>
+          </div>
+
+          <div class="save-btn-container">
             <el-button type="primary" @click="saveConfig">保存配置</el-button>
           </div>
         </el-card>
@@ -136,13 +172,16 @@ import { ref, reactive, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { getRoleConfig, saveRoleConfig as saveConfigAPI } from '@/api/modules/roleConfig'
 import { initRoleKey, deleteRoleKey, getToken, getRoleKeyList } from '@/api/modules/game'
+import { getBindList, getGameRole } from '@/api/modules/account'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { DocumentCopy } from '@element-plus/icons-vue'
-import type { GameRoleConfigEntity } from '@/types/api'
+import type { GameRoleConfigEntity, RoleInfo } from '@/types/api'
 
 const route = useRoute()
 const roleId = ref(Number(route.params.roleId))
 const loading = ref(false)
+// 角色信息
+const roleInfo = ref<RoleInfo | null>(null)
 
 // Token 相关状态
 const tokenLoading = ref(false)
@@ -160,8 +199,9 @@ const tokenUrl = computed(() => {
 
 // 角色标题显示
 const roleTitle = computed(() => {
-  if (config.roleName) {
-    return `角色配置 - ${config.roleName}`
+  const name = roleInfo.value?.roleName || config.roleName
+  if (name) {
+    return `角色配置 - ${name}`
   }
   return `角色配置 - 角色${roleId.value}`
 })
@@ -178,15 +218,52 @@ const config = reactive<GameRoleConfigEntity>({
   nightmareEnabled: 0,
   friendBatchEnabled: 0,
   storeAutoBuyEnabled: 0,
+  battleRenewalEnabled: 0,
+  battleRenewalInterval: 30,
   configStatus: 1
 })
 
+// 每日任务执行时间（用于时间选择器）
+const dailyTaskTime = ref<string>('08:00')
+
 onMounted(async () => {
   await Promise.all([
+    loadRoleInfo(),
     loadConfig(),
     loadRoleKeyStatus()
   ])
 })
+
+// 加载角色详细信息
+async function loadRoleInfo() {
+  try {
+    // 获取绑定列表
+    const bindRes = await getBindList({})
+    const bindList = bindRes.data?.bindInfo || []
+
+    // 遍历查找当前角色
+    for (const bind of bindList) {
+      try {
+        const roleRes = await getGameRole({ bindId: bind.bindId })
+        const roles = roleRes.data?.roleInfos || []
+        const found = roles.find(r => r.roleId === roleId.value)
+        if (found) {
+          roleInfo.value = found
+          // 合并到 config
+          config.roleName = found.roleName
+          config.serverName = found.serverName
+          config.level = found.level
+          config.power = found.power
+          break
+        }
+      } catch (e) {
+        console.warn(`获取绑定 ${bind.bindId} 的角色失败`, e)
+      }
+    }
+  } catch (error) {
+    console.warn('加载角色信息失败', error)
+  }
+}
 
 async function loadConfig() {
   loading.value = true
@@ -196,6 +273,21 @@ async function loadConfig() {
     })
     if (res.data?.data) {
       Object.assign(config, res.data.data)
+      // 如果角色信息已加载，保留角色信息
+      if (roleInfo.value) {
+        config.roleName = roleInfo.value.roleName
+        config.serverName = roleInfo.value.serverName
+        config.level = roleInfo.value.level
+        config.power = roleInfo.value.power
+      }
+      // 设置每日任务执行时间
+      dailyTaskTime.value = res.data.data.dailyTaskExecuteTimeOrDefault
+        || res.data.data.dailyTaskExecuteTime
+        || '08:00'
+      // 设置挂机续费间隔默认值
+      if (!config.battleRenewalInterval) {
+        config.battleRenewalInterval = res.data.data.battleRenewalIntervalOrDefault || 30
+      }
     }
   } catch (error) {
     ElMessage.error('加载配置失败')
@@ -334,6 +426,8 @@ async function copyCurrentToken() {
 async function saveConfig() {
   loading.value = true
   try {
+    // 将每日任务时间保存到 config
+    config.dailyTaskExecuteTime = dailyTaskTime.value
     await saveConfigAPI(config)
     ElMessage.success('保存成功')
   } catch (error) {
@@ -408,5 +502,17 @@ function formatPower(power: number): string {
 
 .current-token {
   margin-top: 12px;
+}
+
+.form-tip {
+  margin-left: 10px;
+  font-size: 12px;
+  color: #909399;
+}
+
+.save-btn-container {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #ebeef5;
 }
 </style>

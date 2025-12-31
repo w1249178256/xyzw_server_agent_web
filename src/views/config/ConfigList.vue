@@ -78,12 +78,16 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { getRoleConfigList, saveRoleConfig } from '@/api/modules/roleConfig'
+import { getBindList, getGameRole } from '@/api/modules/account'
 import { ElMessage } from 'element-plus'
-import type { GameRoleConfigEntity } from '@/types/api'
+import type { GameRoleConfigEntity, RoleInfo } from '@/types/api'
 
 const router = useRouter()
 const configs = ref<GameRoleConfigEntity[]>([])
 const loading = ref(false)
+
+// 角色信息映射表：roleId -> RoleInfo
+const roleInfoMap = ref<Map<number, RoleInfo>>(new Map())
 
 onMounted(async () => {
   await loadConfigs()
@@ -92,10 +96,40 @@ onMounted(async () => {
 async function loadConfigs() {
   loading.value = true
   try {
-    // userId 由后端从 token 解析，前端不传
+    // 1. 先获取绑定列表
+    const bindRes = await getBindList({})
+    const bindList = bindRes.data?.bindInfo || []
+
+    // 2. 获取所有绑定账号下的角色信息
+    const roleMap = new Map<number, RoleInfo>()
+    for (const bind of bindList) {
+      try {
+        const roleRes = await getGameRole({ bindId: bind.bindId })
+        const roles = roleRes.data?.roleInfos || []
+        for (const role of roles) {
+          roleMap.set(role.roleId, role)
+        }
+      } catch (e) {
+        // 某个绑定获取失败不影响其他
+        console.warn(`获取绑定 ${bind.bindId} 的角色失败`, e)
+      }
+    }
+    roleInfoMap.value = roleMap
+
+    // 3. 获取角色配置列表
     const res = await getRoleConfigList({})
     if (res.data?.data) {
-      configs.value = res.data.data
+      // 4. 合并角色信息到配置数据
+      configs.value = res.data.data.map(config => {
+        const roleInfo = roleMap.get(config.roleId)
+        return {
+          ...config,
+          roleName: roleInfo?.roleName || config.roleName,
+          serverName: roleInfo?.serverName || config.serverName,
+          level: roleInfo?.level || config.level,
+          power: roleInfo?.power || config.power
+        }
+      })
     }
   } catch (error) {
     ElMessage.error('加载配置失败')

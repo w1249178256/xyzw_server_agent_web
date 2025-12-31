@@ -33,7 +33,7 @@
             <span>任务管理</span>
           </template>
           <el-menu-item index="/tasks">任务列表</el-menu-item>
-          <el-menu-item index="/tasks/create">创建任务</el-menu-item>
+          <el-menu-item index="/tasks/charm">符咒抢购</el-menu-item>
           <el-menu-item index="/tasks/monitor">任务监控</el-menu-item>
         </el-sub-menu>
       </el-menu>

@@ -83,9 +83,9 @@ const routes: RouteRecordRaw[] = [
             component: () => import('@/views/tasks/TaskList.vue')
           },
           {
-            path: 'create',
-            name: 'CreateTask',
-            component: () => import('@/views/tasks/CreateTask.vue')
+            path: 'charm',
+            name: 'CharmBuy',
+            component: () => import('@/views/tasks/CharmBuy.vue')
           },
           {
             path: 'monitor',

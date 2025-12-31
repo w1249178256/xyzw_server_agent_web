@@ -48,12 +48,16 @@ export interface RoleConfig {
 
 // 任务模型
 export interface GameTask {
-  id: number
-  userId: number
+  id?: number
+  userId?: number
   roleId: number
   taskName: string
   taskType: string
-  cronExpression: string
+  cronExpression?: string
+  executionMode?: string // 执行模式
+  intervalMinutes?: number // 间隔分钟数
+  executeTime?: string // 执行时间
+  timeEditable?: number // 时间是否可编辑
   taskConfig: any
   status: TaskStatus
   lastExecuteTime?: string
@@ -61,12 +65,12 @@ export interface GameTask {
   executeCount: number
   successCount: number
   failCount: number
-  createTime: string
-  updateTime: string
-  maxRetryCount: number
-  currentRetryCount: number
-  retryInterval: number
-  retryStrategy: string
+  createTime?: string
+  updateTime?: string
+  maxRetryCount?: number
+  currentRetryCount?: number
+  retryInterval?: number
+  retryStrategy?: string
   lastErrorMessage?: string
   nextRetryTime?: string
 }

@@ -166,6 +166,7 @@ export interface GameRoleConfigEntity {
   serverName?: string // 服务器名称
   level?: number // 角色等级
   power?: number // 战力
+  // 功能开关
   dailyTaskEnabled: number
   autoBattleEnabled: number
   autoUpgradeEnabled: number
@@ -175,6 +176,14 @@ export interface GameRoleConfigEntity {
   nightmareEnabled: number
   friendBatchEnabled: number
   storeAutoBuyEnabled: number
+  battleRenewalEnabled?: number // 挂机续费开关
+  charmBuyEnabled?: number // 符咒购买开关
+  // 任务调度配置
+  dailyTaskExecuteTime?: string // 每日任务执行时间 (HH:mm 格式)
+  battleRenewalInterval?: number // 挂机续费间隔 (分钟)
+  // 带默认值的字段（后端返回）
+  dailyTaskExecuteTimeOrDefault?: string
+  battleRenewalIntervalOrDefault?: number
   configStatus: number
   createTime?: string
   updateTime?: string
@@ -200,9 +209,16 @@ export interface FeatureCheckResponse {
   enabled: boolean
 }
 
+// 任务调度配置
+export interface TaskScheduleConfig {
+  dailyTaskExecuteTime?: string // 每日任务执行时间 (HH:mm 格式)
+  battleRenewalInterval?: number // 挂机续费间隔 (分钟)
+}
+
 export interface BatchUpdateRequest {
   roleId: number
-  features: Record<string, number>
+  features?: Record<string, number>
+  taskSchedule?: TaskScheduleConfig
 }
 
 export interface BatchUpdateResponse {
@@ -216,25 +232,29 @@ export interface GameRequest {
 }
 
 export interface GameTaskEntity {
-  id: number
-  userId: number
+  id?: number
+  userId?: number
   roleId: number
   taskName: string
   taskType: string
-  cronExpression: string
-  taskConfig: string
+  cronExpression?: string
+  executionMode?: string // 执行模式
+  intervalMinutes?: number // 间隔分钟数
+  executeTime?: string // 执行时间
+  timeEditable?: number // 时间是否可编辑
+  taskConfig?: string
   status: number
   lastExecuteTime?: string
   nextExecuteTime?: string
   executeCount: number
   successCount: number
   failCount: number
-  createTime: string
-  updateTime: string
-  maxRetryCount: number
-  currentRetryCount: number
-  retryInterval: number
-  retryStrategy: string
+  createTime?: string
+  updateTime?: string
+  maxRetryCount?: number
+  currentRetryCount?: number
+  retryInterval?: number
+  retryStrategy?: string
   lastErrorMessage?: string
   nextRetryTime?: string
 }

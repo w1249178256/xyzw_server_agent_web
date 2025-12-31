@@ -1189,6 +1189,36 @@
         }
       }
     },
+    "/game/fishing/execute": {
+      "post": {
+        "tags": [
+          "game-controller"
+        ],
+        "operationId": "fishingExecute",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FishingRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseMapStringObject"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/game/dailyTask": {
       "post": {
         "tags": [
@@ -1339,6 +1369,36 @@
         }
       }
     },
+    "/game/car/sendAll": {
+      "post": {
+        "tags": [
+          "game-controller"
+        ],
+        "operationId": "carSendAll",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GameRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseMapStringObject"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/game/car/refresh": {
       "post": {
         "tags": [
@@ -1452,6 +1512,36 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/BaseResponseObject"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/game/arena/fillPk": {
+      "post": {
+        "tags": [
+          "game-controller"
+        ],
+        "operationId": "arenaFillPk",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GameRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponseMapStringObject"
                 }
               }
             }
@@ -2457,6 +2547,10 @@
       "BatchAddRolesRequest": {
         "type": "object",
         "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
           "bindId": {
             "type": "integer",
             "format": "int64"
@@ -2464,24 +2558,10 @@
           "roleSelections": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/RoleSelection"
+              "$ref": "#/components/schemas/RoleIdentifier"
             }
           }
-        },
-        "required": ["bindId", "roleSelections"]
-      },
-      "RoleSelection": {
-        "type": "object",
-        "properties": {
-          "gameRoleId": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "serverId": {
-            "type": "string"
-          }
-        },
-        "required": ["gameRoleId", "serverId"]
+        }
       },
       "RoleIdentifier": {
         "type": "object",
@@ -2584,6 +2664,10 @@
       "AddRoleRequest": {
         "type": "object",
         "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
           "bindId": {
             "type": "integer",
             "format": "int64"
@@ -2595,8 +2679,7 @@
           "serverId": {
             "type": "string"
           }
-        },
-        "required": ["bindId", "gameRoleId", "serverId"]
+        }
       },
       "ConfigStatusRequest": {
         "type": "object",
@@ -2698,6 +2781,21 @@
             "type": "integer",
             "format": "int32"
           },
+          "battleRenewalEnabled": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "battleRenewalInterval": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "charmBuyEnabled": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "dailyTaskExecuteTime": {
+            "type": "string"
+          },
           "configStatus": {
             "type": "integer",
             "format": "int32"
@@ -2709,6 +2807,13 @@
           "updateTime": {
             "type": "string",
             "format": "date-time"
+          },
+          "dailyTaskExecuteTimeOrDefault": {
+            "type": "string"
+          },
+          "battleRenewalIntervalOrDefault": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
@@ -2858,6 +2963,21 @@
               "type": "integer",
               "format": "int32"
             }
+          },
+          "taskSchedule": {
+            "$ref": "#/components/schemas/TaskScheduleConfig"
+          }
+        }
+      },
+      "TaskScheduleConfig": {
+        "type": "object",
+        "properties": {
+          "dailyTaskExecuteTime": {
+            "type": "string"
+          },
+          "battleRenewalInterval": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
@@ -3028,6 +3148,41 @@
           }
         }
       },
+      "FishingRequest": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "roleId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "count": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "BaseResponseMapStringObject": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "msg": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object"
+            }
+          }
+        }
+      },
       "BaseResponseDailyTaskResponse": {
         "type": "object",
         "properties": {
@@ -3067,24 +3222,6 @@
           },
           "taskDetails": {
             "type": "object"
-          }
-        }
-      },
-      "BaseResponseMapStringObject": {
-        "type": "object",
-        "properties": {
-          "code": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "msg": {
-            "type": "string"
-          },
-          "data": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "object"
-            }
           }
         }
       },
@@ -3232,6 +3369,20 @@
           },
           "cronExpression": {
             "type": "string"
+          },
+          "executionMode": {
+            "type": "string"
+          },
+          "intervalMinutes": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "executeTime": {
+            "type": "string"
+          },
+          "timeEditable": {
+            "type": "integer",
+            "format": "int32"
           },
           "taskConfig": {
             "type": "string"
